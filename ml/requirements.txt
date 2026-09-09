@@ -1,0 +1,15 @@
+# ML layer dependencies (pinned). Pure computation — no Django.
+# Dataset assembly, feature engineering, and gradient-boosted forecasting.
+#
+# Runs on Python 3.13 (a coherent numpy-2 scientific stack; the pins below are
+# mutually compatible and ship prebuilt wheels for 3.13). Note: Python 3.14 is
+# NOT supported here — the scientific stack lacks stable 3.14 wheels and mixing
+# numpy 1.x/2.x builds caused native segfaults.
+pandas==2.2.3
+numpy==2.2.6
+# Gradient-boosted forecasting model + preprocessing/persistence.
+# (LightGBM was preferred but its wheel fails to build on this macOS without
+# libomp/cmake; XGBoost ships a working wheel, so it is the chosen GBM.)
+xgboost==2.1.4
+scikit-learn==1.5.2
+joblib==1.4.2

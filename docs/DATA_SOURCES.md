@@ -112,6 +112,16 @@ Access terms, endpoints, quotas, and licensing change over time and were only sp
 - **Fallback source:** INCOIS (ocean/marine), NOAA (global weather/marine models), commercial weather APIs.
 - **Verification:** Not re-verified at time of writing — confirm IMD product endpoints/terms at integration.
 
+### 5a. Open-Meteo (implemented default prototype weather provider)
+
+- **Access classification:** `FREE_API` (keyless on the free tier)
+- **Purpose:** Hourly weather **forecasts** (temperature, wind, precipitation, WMO condition) for the East Coast ports, feeding weather risk (FR-WR) and ETA/demurrage context. This is the **implemented** default prototype weather source (adapter: `apps.ingestion.sources.open_meteo`).
+- **Endpoint:** `https://api.open-meteo.com/v1/forecast` — no API key on the free tier.
+- **Free / paid:** Free tier (fair-use, non-commercial). Paid/self-hosted tiers exist for commercial use / SLA.
+- **Licensing:** Open licence (CC BY 4.0) with attribution to Open-Meteo required; confirm current terms before production.
+- **Limitations:** model forecasts (not point measurements); meteorological only (no waves/currents — use INCOIS/NOAA for marine). Response cached to avoid repeat calls.
+- **Full detail:** see [DATA_INGESTION_WEATHER.md](./DATA_INGESTION_WEATHER.md).
+
 ## 6. INCOIS (Indian National Centre for Ocean Information Services)
 
 - **Access classification:** `FREE_DOWNLOAD` (Ocean State Forecast products) / `LICENSED/COMMERCIAL` or charged (some in-situ datasets) — mixed

@@ -1,0 +1,116 @@
+{
+  "model_name": "freight_gbm_xgboost",
+  "model_version": "0.1.0",
+  "dataset_version": "synthetic-demo",
+  "feature_list": [
+    "route_distance_nm",
+    "historical_freight_rate",
+    "vessel_availability",
+    "port_congestion",
+    "port_waiting_time",
+    "commodity_import_volume",
+    "commodity_price",
+    "bunker_indicator",
+    "weather_risk",
+    "seasonality_month",
+    "seasonality_sin",
+    "seasonality_cos",
+    "is_monsoon",
+    "trade_volume",
+    "ton_mile_proxy",
+    "vessel_supply_proxy",
+    "freight_rate_lag_1",
+    "freight_rate_lag_2",
+    "freight_rate_lag_3",
+    "freight_rate_lag_7",
+    "freight_rate_rollmean_3",
+    "freight_rate_rollmean_7",
+    "freight_rate_rollmean_14",
+    "freight_rate_rollvol_3",
+    "freight_rate_rollvol_7",
+    "freight_rate_rollvol_14",
+    "freight_rate_pctchg_1",
+    "freight_rate_pctchg_7",
+    "day_of_year",
+    "week_of_year",
+    "quarter",
+    "supply_availability_trend_rollmean_3",
+    "supply_tightness",
+    "demand_volume_trend_rollmean_3",
+    "demand_tonmile_trend_rollmean_3",
+    "congestion_trend_rollmean_3",
+    "congestion_pressure",
+    "waiting_trend_rollmean_3",
+    "weather_risk_trend_rollmean_3",
+    "weather_risk_elevated"
+  ],
+  "xgb_params": {
+    "n_estimators": 300,
+    "max_depth": 4,
+    "learning_rate": 0.05,
+    "subsample": 0.9,
+    "colsample_bytree": 0.9,
+    "reg_lambda": 1.0,
+    "random_state": 42,
+    "n_jobs": 2
+  },
+  "split": {
+    "train_rows": 72,
+    "val_rows": 24,
+    "test_rows": 24,
+    "train_end": "2026-02-05T09:36:00",
+    "val_end": "2026-02-17T04:48:00"
+  },
+  "horizons": {
+    "7": {
+      "horizon_days": 7,
+      "target_column": "future_7d_freight",
+      "metrics": {
+        "n": 16,
+        "mae": 1.1480154037475587,
+        "rmse": 1.227408031972923,
+        "mape_pct": 8.600798070557087
+      },
+      "baseline_metrics": {
+        "n": 16,
+        "mae": 0.42125000000000035,
+        "rmse": 0.4977072432665615,
+        "mape_pct": 3.123712957481673
+      },
+      "improvement_pct": {
+        "mae": -172.53,
+        "rmse": -146.61
+      }
+    },
+    "14": {
+      "horizon_days": 14,
+      "target_column": "future_14d_freight",
+      "metrics": {
+        "n": 2,
+        "mae": 0.5943281555175783,
+        "rmse": 0.7068378233071375,
+        "mape_pct": 4.279541460628336
+      },
+      "baseline_metrics": {
+        "n": 2,
+        "mae": 0.6900000000000004,
+        "rmse": 0.8700574693662487,
+        "mape_pct": 4.9267182009838395
+      },
+      "improvement_pct": {
+        "mae": 13.87,
+        "rmse": 18.76
+      }
+    },
+    "30": {
+      "horizon_days": 30,
+      "target_column": "future_30d_freight",
+      "metrics": {
+        "n": 0
+      },
+      "baseline_metrics": {},
+      "improvement_pct": {}
+    }
+  },
+  "trained_at": "2026-09-09T10:13:51.010416+00:00"
+}

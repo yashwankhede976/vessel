@@ -1,0 +1,149 @@
+{
+  "benchmark": "baseline_freight",
+  "note": "Deterministic benchmarks (naive previous, moving average). Advanced models are compared against these.",
+  "generated_at": "2026-09-09T09:48:00.349659+00:00",
+  "results": [
+    {
+      "model": "naive_previous",
+      "params": {},
+      "horizons": {
+        "7": {
+          "n": 112,
+          "mae": 0.5840178571428573,
+          "rmse": 0.7938935471999469,
+          "mape_pct": 4.207691633443887
+        },
+        "14": {
+          "n": 98,
+          "mae": 0.9559183673469388,
+          "rmse": 1.3272781724035,
+          "mape_pct": 6.911062236786256
+        },
+        "30": {
+          "n": 66,
+          "mae": 1.7592424242424243,
+          "rmse": 2.410118505825224,
+          "mape_pct": 13.311381870738007
+        }
+      },
+      "per_lane": {
+        "7": {
+          "Australia | Paradip | capesize": {
+            "n": 56,
+            "mae": 0.7400000000000001,
+            "rmse": 0.9644465474338859,
+            "mape_pct": 5.096449906905089
+          },
+          "Indonesia | Visakhapatnam | panamax": {
+            "n": 56,
+            "mae": 0.4280357142857144,
+            "rmse": 0.5747841209656769,
+            "mape_pct": 3.318933359982684
+          }
+        },
+        "14": {
+          "Australia | Paradip | capesize": {
+            "n": 49,
+            "mae": 1.4830612244897956,
+            "rmse": 1.7941816393838281,
+            "mape_pct": 10.490056603718442
+          },
+          "Indonesia | Visakhapatnam | panamax": {
+            "n": 49,
+            "mae": 0.42877551020408167,
+            "rmse": 0.5515858398975723,
+            "mape_pct": 3.332067869854071
+          }
+        },
+        "30": {
+          "Australia | Paradip | capesize": {
+            "n": 33,
+            "mae": 2.9072727272727272,
+            "rmse": 3.343338016250988,
+            "mape_pct": 21.80651038792081
+          },
+          "Indonesia | Visakhapatnam | panamax": {
+            "n": 33,
+            "mae": 0.6112121212121213,
+            "rmse": 0.6628976793844833,
+            "mape_pct": 4.816253353555206
+          }
+        }
+      },
+      "n_rows": 120,
+      "generated_at": "2026-09-09T09:48:00.346952+00:00"
+    },
+    {
+      "model": "moving_average",
+      "params": {
+        "window": 7
+      },
+      "horizons": {
+        "7": {
+          "n": 110,
+          "mae": 0.76074329004329,
+          "rmse": 1.0434025782609428,
+          "mape_pct": 5.478000348789646
+        },
+        "14": {
+          "n": 96,
+          "mae": 1.1908665674603176,
+          "rmse": 1.606582543529952,
+          "mape_pct": 8.680153693407783
+        },
+        "30": {
+          "n": 64,
+          "mae": 1.9357061011904761,
+          "rmse": 2.6071199074536224,
+          "mape_pct": 14.649484600952478
+        }
+      },
+      "per_lane": {
+        "7": {
+          "Australia | Paradip | capesize": {
+            "n": 55,
+            "mae": 1.091522077922078,
+            "rmse": 1.3693039018394202,
+            "mape_pct": 7.6173732715092
+          },
+          "Indonesia | Visakhapatnam | panamax": {
+            "n": 55,
+            "mae": 0.4299645021645024,
+            "rmse": 0.5498951764204749,
+            "mape_pct": 3.3386274260700914
+          }
+        },
+        "14": {
+          "Australia | Paradip | capesize": {
+            "n": 48,
+            "mae": 1.8390357142857143,
+            "rmse": 2.186686874617129,
+            "mape_pct": 13.144414713159488
+          },
+          "Indonesia | Visakhapatnam | panamax": {
+            "n": 48,
+            "mae": 0.5426974206349207,
+            "rmse": 0.6169403947931382,
+            "mape_pct": 4.2158926736560804
+          }
+        },
+        "30": {
+          "Australia | Paradip | capesize": {
+            "n": 32,
+            "mae": 3.2603839285714287,
+            "rmse": 3.62114206110066,
+            "mape_pct": 24.445148322908388
+          },
+          "Indonesia | Visakhapatnam | panamax": {
+            "n": 32,
+            "mae": 0.6110282738095238,
+            "rmse": 0.6938865880024179,
+            "mape_pct": 4.853820878996568
+          }
+        }
+      },
+      "n_rows": 120,
+      "generated_at": "2026-09-09T09:48:00.349542+00:00"
+    }
+  ]
+}

@@ -41,9 +41,18 @@ SCORE = [MinValueValidator(Decimal("0")), MaxValueValidator(Decimal("1"))]
 class AISPosition(TimeStampedModel):
     """A timestamped AIS position report for a vessel."""
 
+    # Nullable: AIS reports arrive keyed by MMSI and may not match a known
+    # Vessel (which requires IMO + specifications AIS does not provide). The
+    # raw MMSI/name are always retained so the position is never lost.
     vessel = models.ForeignKey(
-        "catalog.Vessel", on_delete=models.CASCADE, related_name="positions"
+        "catalog.Vessel",
+        on_delete=models.CASCADE,
+        related_name="positions",
+        null=True,
+        blank=True,
     )
+    mmsi = models.CharField(max_length=9, blank=True, db_index=True)
+    vessel_name = models.CharField(max_length=120, blank=True)
     timestamp = models.DateTimeField()
 
     latitude = models.DecimalField(max_digits=9, decimal_places=6, validators=LAT)
@@ -70,17 +79,28 @@ class AISPosition(TimeStampedModel):
     class Meta:
         ordering = ["-timestamp"]
         constraints = [
+            # Dedup by MMSI+timestamp when an MMSI is present (the AIS path),
+            # and by vessel+timestamp otherwise (non-AIS/linked positions).
+            # Partial constraints avoid blank-MMSI rows colliding.
             models.UniqueConstraint(
-                fields=["vessel", "timestamp"], name="uq_ais_vessel_ts"
+                fields=["mmsi", "timestamp"],
+                name="uq_ais_mmsi_ts",
+                condition=~models.Q(mmsi=""),
+            ),
+            models.UniqueConstraint(
+                fields=["vessel", "timestamp"],
+                name="uq_ais_vessel_ts",
+                condition=models.Q(mmsi=""),
             ),
         ]
         indexes = [
             models.Index(fields=["vessel", "-timestamp"], name="ais_vessel_ts_idx"),
+            models.Index(fields=["mmsi", "-timestamp"], name="ais_mmsi_ts_idx"),
             models.Index(fields=["timestamp"], name="ais_ts_idx"),
         ]
 
     def __str__(self) -> str:
-        return f"{self.vessel_id} @ {self.timestamp:%Y-%m-%d %H:%M}"
+        return f"{self.mmsi or self.vessel_id} @ {self.timestamp:%Y-%m-%d %H:%M}"
 
 
 class PortCall(TimeStampedModel):
@@ -191,11 +211,24 @@ class WeatherObservation(TimeStampedModel):
     temperature_c = models.DecimalField(
         "temperature (C)", max_digits=5, decimal_places=2, null=True, blank=True,
     )
+    # Provider weather code (e.g. WMO code) and a human-readable condition.
+    weather_code = models.IntegerField(null=True, blank=True)
+    weather_condition = models.CharField(max_length=64, blank=True)
+
     is_forecast = models.BooleanField(default=False)
     source = models.CharField(max_length=64, blank=True)
+    # Raw provider record for this observation (audit / reprocessing).
+    raw = models.JSONField(default=dict, blank=True)
 
     class Meta:
         ordering = ["-timestamp"]
+        constraints = [
+            # Dedup: one observation per location + timestamp + source.
+            models.UniqueConstraint(
+                fields=["latitude", "longitude", "timestamp", "source"],
+                name="uq_weather_loc_ts_source",
+            ),
+        ]
         indexes = [
             models.Index(fields=["port", "-timestamp"], name="wx_port_ts_idx"),
             models.Index(fields=["timestamp"], name="wx_ts_idx"),
@@ -205,17 +238,65 @@ class WeatherObservation(TimeStampedModel):
         return f"weather @ {self.latitude},{self.longitude} {self.timestamp:%Y-%m-%d}"
 
 
+class MarineWarningType(models.TextChoices):
+    """Categories of marine/coastal warning products (e.g. IMD)."""
+
+    PORT_WARNING = "port_warning", "Port warning"
+    SEA_AREA_BULLETIN = "sea_area_bulletin", "Sea area bulletin"
+    COASTAL_BULLETIN = "coastal_bulletin", "Coastal bulletin"
+    OBSERVATION = "observation", "Ocean-state observation"
+    OTHER = "other", "Other"
+
+
+class WarningSeverity(models.TextChoices):
+    """Normalized severity levels. Absent/unknown severity uses UNKNOWN."""
+
+    NONE = "none", "No warning"
+    LOW = "low", "Low"
+    MODERATE = "moderate", "Moderate"
+    HIGH = "high", "High"
+    SEVERE = "severe", "Severe"
+    UNKNOWN = "unknown", "Unknown"
+
+
 class MarineObservation(TimeStampedModel):
-    """A marine/ocean-state observation (waves, currents, sea state)."""
+    """A marine/ocean-state observation OR a marine/coastal warning bulletin.
+
+    Wave/current fields apply to ocean-state observations; the warning fields
+    (warning_type/severity/issue_time/valid_time/area_name) apply to IMD-style
+    bulletins. Coordinates are nullable because a sea-area/coastal bulletin may
+    cover a named region without a single point.
+    """
 
     port = models.ForeignKey(
         "catalog.Port", on_delete=models.SET_NULL, related_name="marine_observations",
         null=True, blank=True,
     )
     timestamp = models.DateTimeField()
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, validators=LAT)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, validators=LON)
+    latitude = models.DecimalField(
+        max_digits=9, decimal_places=6, validators=LAT, null=True, blank=True
+    )
+    longitude = models.DecimalField(
+        max_digits=9, decimal_places=6, validators=LON, null=True, blank=True
+    )
     geom = geo_point_field()
+
+    # Warning/bulletin fields (null for pure ocean-state observations).
+    warning_type = models.CharField(
+        max_length=20, choices=MarineWarningType.choices,
+        default=MarineWarningType.OBSERVATION,
+    )
+    severity = models.CharField(
+        max_length=10, choices=WarningSeverity.choices, default=WarningSeverity.NONE
+    )
+    area_name = models.CharField(max_length=200, blank=True)
+    headline = models.CharField(max_length=500, blank=True)
+    issue_time = models.DateTimeField(null=True, blank=True)
+    valid_from = models.DateTimeField(null=True, blank=True)
+    valid_to = models.DateTimeField(null=True, blank=True)
+    # Raw source reference (bulletin id / URL / product code) + raw payload.
+    source_ref = models.CharField(max_length=500, blank=True)
+    raw = models.JSONField(default=dict, blank=True)
 
     significant_wave_height_m = models.DecimalField(
         "sig. wave height (m)", max_digits=5, decimal_places=2, null=True, blank=True,
@@ -244,10 +325,11 @@ class MarineObservation(TimeStampedModel):
         indexes = [
             models.Index(fields=["port", "-timestamp"], name="marine_port_ts_idx"),
             models.Index(fields=["timestamp"], name="marine_ts_idx"),
+            models.Index(fields=["warning_type", "-timestamp"], name="marine_warn_idx"),
         ]
 
     def __str__(self) -> str:
-        return f"marine @ {self.latitude},{self.longitude} {self.timestamp:%Y-%m-%d}"
+        return f"marine {self.warning_type} @ {self.area_name or self.port_id} {self.timestamp:%Y-%m-%d}"
 
 
 class CycloneObservation(TimeStampedModel):
@@ -266,8 +348,13 @@ class CycloneObservation(TimeStampedModel):
     advisory_no = models.CharField(max_length=32, blank=True)
     timestamp = models.DateTimeField()
 
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, validators=LAT)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, validators=LON)
+    # Nullable: a wind warning may reference an area rather than a track point.
+    latitude = models.DecimalField(
+        max_digits=9, decimal_places=6, validators=LAT, null=True, blank=True
+    )
+    longitude = models.DecimalField(
+        max_digits=9, decimal_places=6, validators=LON, null=True, blank=True
+    )
     geom = geo_point_field()
 
     category = models.CharField(
@@ -281,6 +368,29 @@ class CycloneObservation(TimeStampedModel):
         "central pressure (hPa)", max_digits=7, decimal_places=2, null=True, blank=True,
         validators=NON_NEGATIVE,
     )
+
+    class BulletinKind(models.TextChoices):
+        TRACK = "track", "Cyclone track"
+        WIND_WARNING = "wind_warning", "Cyclone wind warning"
+
+    # Which cyclone product this row came from.
+    bulletin_kind = models.CharField(
+        max_length=16, choices=BulletinKind.choices, default=BulletinKind.TRACK
+    )
+    severity = models.CharField(
+        max_length=10, choices=WarningSeverity.choices, default=WarningSeverity.UNKNOWN
+    )
+    # A wind warning may state a wind-gust value distinct from max sustained wind.
+    gust_kn = models.DecimalField(
+        "gust (kn)", max_digits=6, decimal_places=2, null=True, blank=True,
+        validators=NON_NEGATIVE,
+    )
+    issue_time = models.DateTimeField(null=True, blank=True)
+    valid_from = models.DateTimeField(null=True, blank=True)
+    valid_to = models.DateTimeField(null=True, blank=True)
+    source_ref = models.CharField(max_length=500, blank=True)
+    raw = models.JSONField(default=dict, blank=True)
+
     is_forecast = models.BooleanField(default=False)
     source = models.CharField(max_length=64, blank=True)
 
@@ -288,7 +398,7 @@ class CycloneObservation(TimeStampedModel):
         ordering = ["-timestamp"]
         constraints = [
             models.UniqueConstraint(
-                fields=["system_name", "timestamp", "source"],
+                fields=["system_name", "timestamp", "bulletin_kind", "source"],
                 name="uq_cyclone_system_ts_source",
             ),
         ]
@@ -314,7 +424,11 @@ class CommodityPriceObservation(TimeStampedModel):
     price = models.DecimalField(max_digits=14, decimal_places=4, validators=NON_NEGATIVE)
     currency = models.CharField(max_length=3, default="USD")
     unit = models.CharField(max_length=16, default="tonne")
-    source = models.CharField(max_length=64, blank=True)
+    # Provenance.
+    source = models.CharField(max_length=120, blank=True)
+    source_url = models.URLField(max_length=500, blank=True)
+    source_date = models.DateField(null=True, blank=True)
+    retrieved_at = models.DateTimeField(null=True, blank=True)
     is_estimated = models.BooleanField(default=False)
 
     class Meta:
@@ -350,18 +464,43 @@ class TradeObservation(TimeStampedModel):
     )
     reporter_country = models.CharField(max_length=80, blank=True)
     partner_country = models.CharField(max_length=80, blank=True)
+    # Harmonized System commodity code (e.g. 2701 for coal).
+    hs_code = models.CharField(max_length=10, blank=True, db_index=True)
     period = models.DateField(help_text="First day of the reporting period.")
+
+    class Flow(models.TextChoices):
+        IMPORT = "import", "Import"
+        EXPORT = "export", "Export"
+        RE_IMPORT = "re_import", "Re-import"
+        RE_EXPORT = "re_export", "Re-export"
+
+    flow = models.CharField(
+        max_length=10, choices=Flow.choices, default=Flow.IMPORT
+    )
 
     quantity_tonnes = models.DecimalField(
         "quantity (t)", max_digits=16, decimal_places=2, null=True, blank=True,
         validators=NON_NEGATIVE,
     )
+    # Net weight as reported (kg), when the source provides it.
+    net_weight_kg = models.DecimalField(
+        "net weight (kg)", max_digits=18, decimal_places=2, null=True, blank=True,
+        validators=NON_NEGATIVE,
+    )
+    # The quantity unit label as reported (e.g. "kg", "N/A").
+    qty_unit = models.CharField(max_length=32, blank=True)
     trade_value = models.DecimalField(
         "trade value", max_digits=18, decimal_places=2, null=True, blank=True,
         validators=NON_NEGATIVE,
     )
     currency = models.CharField(max_length=3, default="USD")
-    source = models.CharField(max_length=64, blank=True)
+    # Provenance.
+    source = models.CharField(max_length=120, blank=True)
+    source_url = models.URLField(max_length=500, blank=True)
+    source_date = models.DateField(null=True, blank=True)
+    retrieved_at = models.DateTimeField(null=True, blank=True)
+    # The raw provider record exactly as received (audit / reprocessing).
+    raw = models.JSONField(default=dict, blank=True)
 
     class Meta:
         ordering = ["-period"]
@@ -370,10 +509,66 @@ class TradeObservation(TimeStampedModel):
             models.Index(fields=["origin"], name="trade_origin_idx"),
             models.Index(fields=["destination_port"], name="trade_dest_idx"),
             models.Index(fields=["period"], name="trade_period_idx"),
+            models.Index(fields=["hs_code", "-period"], name="trade_hs_idx"),
         ]
 
     def __str__(self) -> str:
         return f"trade {self.commodity_id} {self.period}"
+
+
+class PortTraffic(TimeStampedModel):
+    """Port cargo throughput/traffic for a period (e.g. data.gov.in port stats).
+
+    Only fields actually provided by a source are populated; the rest stay
+    null. `commodity` is optional because many port-traffic datasets report
+    total/aggregate throughput, not per-commodity.
+    """
+
+    class Direction(models.TextChoices):
+        IMPORT = "import", "Import"
+        EXPORT = "export", "Export"
+        TOTAL = "total", "Total / unspecified"
+
+    port = models.ForeignKey(
+        "catalog.Port", on_delete=models.CASCADE, related_name="traffic_observations"
+    )
+    commodity = models.ForeignKey(
+        "catalog.Commodity", on_delete=models.SET_NULL, related_name="port_traffic",
+        null=True, blank=True,
+    )
+    period = models.DateField(help_text="First day of the reporting period.")
+    direction = models.CharField(
+        max_length=8, choices=Direction.choices, default=Direction.TOTAL
+    )
+    # Throughput in tonnes; nullable because a source may report only counts.
+    throughput_tonnes = models.DecimalField(
+        "throughput (t)", max_digits=16, decimal_places=2, null=True, blank=True,
+        validators=NON_NEGATIVE,
+    )
+    # Number of vessels/ships, when the source provides it.
+    vessel_count = models.PositiveIntegerField(null=True, blank=True)
+
+    # Provenance.
+    source = models.CharField(max_length=120, blank=True)
+    source_url = models.URLField(max_length=500, blank=True)
+    source_date = models.DateField(null=True, blank=True)
+    retrieved_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-period"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["port", "commodity", "period", "direction", "source"],
+                name="uq_porttraffic_natural",
+            ),
+        ]
+        indexes = [
+            models.Index(fields=["port", "-period"], name="porttraffic_port_idx"),
+            models.Index(fields=["period"], name="porttraffic_period_idx"),
+        ]
+
+    def __str__(self) -> str:
+        return f"traffic {self.port_id} {self.period} ({self.direction})"
 
 
 class BunkerPriceObservation(TimeStampedModel):

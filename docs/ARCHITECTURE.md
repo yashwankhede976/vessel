@@ -412,8 +412,8 @@ vessel/
 | --- | --- | --- |
 | `frontend/` | 1 — Presentation | React/TS SPA; deployed independently as static files behind nginx/CDN. |
 | `backend/config/`, `backend/apps/` | 2 — API, 3 — Domain/service | DRF at the edge; business logic in domain services (per-app). Views stay thin. |
-| `backend/apps/*/` (future `ingestion` app / workers) | 4 — Data ingestion | REST pollers, AIS WebSocket consumer, ETL, CSV/XLSX importers run via the task queue. |
-| `ml/` | 5 — ML | Separate package, imported only by the domain layer through typed interfaces; no Django/ORM inside (§12). |
+| `backend/apps/ingestion/` | 4 — Data ingestion | Reusable ingestion framework (base source, REST/file adapters, validators, normalizers, dedup, retry, `IngestionRun` tracking) + the AISStream WebSocket adapter (`sources/aisstream.py`). |
+| `ml/` | 5 — ML | Separate package, imported only by the domain layer through typed interfaces; no Django/ORM inside (§12). Not yet implemented. |
 | `ml/` (or a sibling package) | 6 — Optimization | OR-Tools solvers invoked by the domain layer with fully-specified problems. |
 | `data/`, PostgreSQL/PostGIS service | 7 — Data | `data/` holds local datasets/manifests; the running database is provisioned (compose service `db` locally). |
 | provider clients under the ingestion app | 8 — External providers | See [DATA_SOURCES.md](./DATA_SOURCES.md). |
@@ -424,19 +424,30 @@ vessel/
 - **Backend** runs as a WSGI service under gunicorn (`docker/backend.Dockerfile`). It is stateless and horizontally scalable; the database is external.
 - The two share no runtime coupling beyond the HTTPS API contract and CORS configuration, satisfying the "separate deployment" requirement and NFR-SCAL/NFR-DEP.
 
-### Current scaffold status
+### Current implementation status
 
-The repository is scaffolded and verified to start, but contains **no business features**:
+The foundation is built and verified; see [IMPLEMENTATION_STATUS.md](./IMPLEMENTATION_STATUS.md) for the full breakdown. In summary:
 
-- Backend exposes only `GET /api/v1/health/` (returns service status); it starts cleanly and the health test passes.
-- Frontend renders a single page confirming it runs and can reach the backend health endpoint; it builds under TypeScript strict mode.
-- `ml/`, ingestion, optimization, and domain services are placeholders to be implemented against the layers above.
+- **Data layer (7):** the `catalog`, `operations`, and `decisions` apps model the core, observational, and decision domains with migrations; a curated, source-referenced East Coast port dataset is seeded via a management command.
+- **API layer (2):** DRF is configured (`/api/v1/`, response envelope, pagination, filtering, OpenAPI docs); ports/berths and vessels endpoints are implemented, with the other domain routers scaffolded.
+- **Domain layer (3):** a deterministic rule-based vessel–port–berth compatibility engine is implemented (no ML). Other domain services (landed cost, risk assembly, recommendations) are pending.
+- **Ingestion layer (4):** the reusable framework and the AISStream adapter are implemented; other provider adapters are pending.
+- **Presentation layer (1):** React/TS app shell (layout, routing, reusable components), a typed API client, and the Port Intelligence page are implemented; other pages are placeholders.
+- **ML (5) and Optimization (6):** not yet implemented — the `ml/` package and OR-Tools solvers are the next major work.
+
+All implemented components ship with tests and pass the suite; migrations are in sync.
 
 ## 16. Related documents
 
 - [README.md](./README.md)
+- [IMPLEMENTATION_STATUS.md](./IMPLEMENTATION_STATUS.md)
 - [PROJECT_SPECIFICATION.md](./PROJECT_SPECIFICATION.md)
 - [BUSINESS_REQUIREMENTS.md](./BUSINESS_REQUIREMENTS.md)
 - [FUNCTIONAL_REQUIREMENTS.md](./FUNCTIONAL_REQUIREMENTS.md)
 - [NON_FUNCTIONAL_REQUIREMENTS.md](./NON_FUNCTIONAL_REQUIREMENTS.md)
+- [API_CONVENTIONS.md](./API_CONVENTIONS.md)
+- [DATA_SOURCES.md](./DATA_SOURCES.md)
+- [DATA_INGESTION_AIS.md](./DATA_INGESTION_AIS.md)
+- [ENVIRONMENT.md](./ENVIRONMENT.md)
+- [DEVELOPMENT_WORKFLOW.md](./DEVELOPMENT_WORKFLOW.md)
 - [GLOSSARY.md](./GLOSSARY.md)

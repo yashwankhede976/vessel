@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "apps.catalog",
     "apps.operations",
     "apps.decisions",
+    "apps.ingestion",
 ]
 
 # PostGIS toggle. When true (and the GIS stack is installed), geospatial
