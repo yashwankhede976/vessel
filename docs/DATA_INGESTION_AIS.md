@@ -98,9 +98,32 @@ The live WebSocket transport is async, but message **processing writes to the da
 
 `backend/apps/ingestion/tests/test_aisstream.py` feeds **mocked AISStream messages** through the same processing path (no network, no `websockets`): position creates an `AISPosition` (with and without a matching vessel), duplicate upsert, malformed skip, out-of-range invalid, static-data enrichment, missing-vessel no-op, a full session (→ partial with a malformed message), reconnect-on-error, and credential/subscription checks.
 
+## 11. Derived AIS features
+
+From stored `AISPosition` rows and the port catalogue, the platform computes
+navigational/spatial features **without requiring PostGIS** — all distances use
+the haversine formula on the portable latitude/longitude decimals. Implemented
+in `backend/apps/operations/services/ais_features.py`:
+
+| Feature | Function | Notes |
+| --- | --- | --- |
+| `nearest_port` | `nearest_port(lat, lon)` | closest catalogue port + distance |
+| `distance_to_port` | `distance_to_port(lat, lon, port)` | great-circle nm |
+| `speed_trend` | `speed_trend(mmsi=…)` | least-squares SOG slope (kn/h) over a recent window; negative = slowing |
+| `traffic_density` | `traffic_density(port, radius_nm=…)` | distinct vessels within a radius of a port |
+| `arrival_probability` | `arrival_probability(position, port)` | 0..1 heuristic from proximity + heading alignment + making-way |
+
+All are deterministic; missing inputs yield `None` (never fabricated). These
+feed the automatic congestion-input derivation
+(`apps/operations/services/congestion_inputs.py`), which supplies
+`vessels_near_port` (from `traffic_density`) and throughput utilization (from
+`PortTraffic`) to the Prompt-1 congestion model.
+
 ## Related documents
 
 - [DATA_SOURCES.md](./DATA_SOURCES.md)
+- [DATA_INGESTION_ARCHITECTURE.md](./DATA_INGESTION_ARCHITECTURE.md)
+- [DATA_FRESHNESS.md](./DATA_FRESHNESS.md)
 - [ENVIRONMENT.md](./ENVIRONMENT.md)
 - [ARCHITECTURE.md](./ARCHITECTURE.md)
 - [NON_FUNCTIONAL_REQUIREMENTS.md](./NON_FUNCTIONAL_REQUIREMENTS.md)

@@ -40,6 +40,9 @@ urlpatterns = [
     path("risk/", include("apps.api.v1.risk.urls")),
     path("fix-wait/", include("apps.api.v1.fix_wait.urls")),
 
+    # System / observability.
+    path("system/", include("apps.api.v1.system.urls")),
+
     # OpenAPI schema + interactive documentation.
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path(

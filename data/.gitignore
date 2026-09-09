@@ -1,0 +1,8 @@
+# Ignore all ingested/processed data; keep the directory structure + docs only.
+*
+!.gitignore
+!README.md
+!raw/
+!raw/.gitkeep
+!processed/
+!processed/.gitkeep

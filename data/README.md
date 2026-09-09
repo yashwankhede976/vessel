@@ -1,21 +1,23 @@
-# Data
+# Data directory
 
-Local, versioned datasets and manifests for development and experiments.
+Local filesystem storage for ingestion, split into two stages:
 
-**Rules (see [../docs/DEVELOPMENT_WORKFLOW.md](../docs/DEVELOPMENT_WORKFLOW.md) §11):**
+- `raw/` — **raw provider responses**, preserved before normalization for
+  diagnosis / reprocessing. Written only when `INGESTION_SAVE_RAW=true` (opt-in).
+  Layout: `raw/<source_key>/<UTC-timestamp>.json`.
+- `processed/` — normalized/derived artifacts produced by the platform.
 
-- Datasets are versioned and referenced by version, never "latest mutable file".
-- Raw and large/processed datasets live in artifact/object storage, **not** in Git — only small, licence-cleared reference data and manifests are committed.
-- **Never commit licensed/commercial data** (e.g. Baltic Exchange) or real secrets.
-- Each dataset records provenance (source, pull date, access class) — see [../docs/DATA_SOURCES.md](../docs/DATA_SOURCES.md).
+## Licensing / privacy
 
-Suggested layout:
+**This directory is git-ignored and must never be committed.** Some providers'
+data is licensed or private (for example Baltic Exchange freight data is
+commercial/licensed; AIS feeds and any credentials-derived data must stay
+server-side). Treat everything under `raw/` as potentially licensed or private:
 
-```
-data/
-├── raw/          # git-ignored — pulled/imported source data
-├── processed/    # git-ignored — engineered/derived datasets
-└── manifests/    # committed — version → location + checksum pointers
-```
+- Do not commit it.
+- Do not redistribute licensed provider payloads.
+- Do not expose raw payloads to the browser.
 
-The `raw/` and `processed/` contents are git-ignored (see root `.gitignore`).
+Keyless/open sources (Open-Meteo, World Bank, INCOIS public products,
+data.gov.in open datasets) are open data but are still kept out of version
+control for hygiene and size.

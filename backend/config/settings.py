@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     "apps.operations",
     "apps.decisions",
     "apps.ingestion",
+    "apps.alerts",
 ]
 
 # PostGIS toggle. When true (and the GIS stack is installed), geospatial
@@ -186,7 +187,26 @@ EXTERNAL_APIS = {
     "IMD_BASE_URL": env("IMD_BASE_URL", default=""),
     # Baltic Exchange (freight benchmark) — LICENSED/commercial; unset by default.
     "BALTIC_EXCHANGE_API_KEY": env("BALTIC_EXCHANGE_API_KEY", default=""),
+    # INCOIS (ocean-state) and World Bank (indicators) are KEYLESS public
+    # services; no key is stored. Optional base-URL overrides only.
+    "INCOIS_BASE_URL": env("INCOIS_BASE_URL", default=""),
+    "WORLD_BANK_BASE_URL": env(
+        "WORLD_BANK_BASE_URL", default="https://api.worldbank.org/v2"
+    ),
 }
+
+# =============================================================================
+# Raw / processed data retention
+# -----------------------------------------------------------------------------
+# Where raw provider responses and processed artifacts are stored on disk. Raw
+# retention is OPT-IN (INGESTION_SAVE_RAW) so no data is written unless enabled.
+# Licensed/private data must be kept under data/raw and never committed
+# (see docs/DATA_SOURCES.md and the data/README.md).
+# =============================================================================
+DATA_DIR = Path(env("DATA_DIR", default=str(BASE_DIR.parent / "data")))
+RAW_DATA_DIR = DATA_DIR / "raw"
+PROCESSED_DATA_DIR = DATA_DIR / "processed"
+INGESTION_SAVE_RAW = env.bool("INGESTION_SAVE_RAW", default=False)
 
 # =============================================================================
 # Production security hardening (applied only when DJANGO_ENV=production)

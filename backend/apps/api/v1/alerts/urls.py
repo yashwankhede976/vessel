@@ -1,13 +1,17 @@
 """Alerts domain API routes (v1).
 
-Scaffold only: the router is intentionally empty. Register ViewSets here as
-alert endpoints are implemented. See docs/API_CONVENTIONS.md.
+- alerts/                 list alerts (filter by status/alert_type/severity)
+- alerts/{id}/            retrieve an alert
+- alerts/{id}/acknowledge/  mark ACKNOWLEDGED
+- alerts/{id}/resolve/      mark RESOLVED
 """
 from rest_framework.routers import DefaultRouter
+
+from .views import AlertViewSet
 
 app_name = "alerts"
 
 router = DefaultRouter()
-# router.register("alerts", AlertViewSet, basename="alert")
+router.register("", AlertViewSet, basename="alert")
 
 urlpatterns = router.urls
