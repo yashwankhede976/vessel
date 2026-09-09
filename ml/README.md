@@ -23,9 +23,11 @@ ml/
 │   ├── metrics.py            # MAE / RMSE / MAPE
 │   ├── baseline_freight.py   # naive-previous + moving-average benchmarks
 │   ├── splits.py             # time-based train/val/test split
-│   ├── freight_gbm.py        # XGBoost gradient-boosted forecaster (7/14/30d)
+│   ├── freight_gbm.py        # XGBoost forecaster (7/14/30d) + quantile uncertainty
+│   ├── uncertainty.py        # prediction interval + confidence (documented formula)
 │   ├── test_baseline.py      # benchmark tests
 │   ├── test_freight_gbm.py   # GBM + split tests
+│   ├── test_uncertainty.py   # uncertainty structure + behaviour tests
 │   ├── results/              # stored baseline evaluation results (JSON)
 │   └── artifacts/            # saved GBM bundle (models git-ignored; reports tracked)
 ├── registry/       # (planned) model versioning / metadata

@@ -85,6 +85,7 @@ All configuration and secrets come from environment variables. Copy `.env.exampl
 - [Weather ingestion (Open-Meteo)](./docs/DATA_INGESTION_WEATHER.md)
 - [Marine/cyclone warnings ingestion (IMD)](./docs/DATA_INGESTION_IMD.md)
 - [Freight dataset schema](./docs/FREIGHT_DATASET_SCHEMA.md)
+- [Freight forecast uncertainty](./docs/FREIGHT_FORECAST_UNCERTAINTY.md)
 - [Environment & secrets](./docs/ENVIRONMENT.md)
 - [API conventions](./docs/API_CONVENTIONS.md)
 - [Development workflow](./docs/DEVELOPMENT_WORKFLOW.md)

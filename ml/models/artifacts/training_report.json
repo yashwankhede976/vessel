@@ -1,6 +1,6 @@
 {
   "model_name": "freight_gbm_xgboost",
-  "model_version": "0.1.0",
+  "model_version": "0.2.0",
   "dataset_version": "synthetic-demo",
   "feature_list": [
     "route_distance_nm",
@@ -69,7 +69,8 @@
         "n": 16,
         "mae": 1.1480154037475587,
         "rmse": 1.227408031972923,
-        "mape_pct": 8.600798070557087
+        "mape_pct": 8.600798070557087,
+        "interval_coverage": 0.125
       },
       "baseline_metrics": {
         "n": 16,
@@ -89,7 +90,8 @@
         "n": 2,
         "mae": 0.5943281555175783,
         "rmse": 0.7068378233071375,
-        "mape_pct": 4.279541460628336
+        "mape_pct": 4.279541460628336,
+        "interval_coverage": 0.0
       },
       "baseline_metrics": {
         "n": 2,
@@ -112,5 +114,18 @@
       "improvement_pct": {}
     }
   },
-  "trained_at": "2026-09-09T10:13:51.010416+00:00"
+  "uncertainty": {
+    "method": "quantile_regression",
+    "detail": "Separate XGBoost reg:quantileerror models predict the lower and upper quantiles; the interval is [lower_q, upper_q].",
+    "lower_quantile": 0.1,
+    "upper_quantile": 0.9,
+    "nominal_interval_pct": 80.0,
+    "confidence": {
+      "formula": "1 / (1 + relative_width / k)",
+      "relative_width": "(upper - lower) / max(|predicted|, eps)",
+      "k": 0.2,
+      "note": "Deterministic function of the interval width; no hand-picked confidence values."
+    }
+  },
+  "trained_at": "2026-09-09T10:29:20.069569+00:00"
 }

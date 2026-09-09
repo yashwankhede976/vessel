@@ -37,6 +37,7 @@ The core intent is to shift the chartering desk from **reactive daily spot-marke
 | [DATA_INGESTION_WEATHER.md](./DATA_INGESTION_WEATHER.md) | Open-Meteo weather ingestion adapter: captured fields, caching, provider limitations & licensing. |
 | [DATA_INGESTION_IMD.md](./DATA_INGESTION_IMD.md) | IMD marine/cyclone warnings adapter: products, mapping to MarineObservation/CycloneObservation, availability caveats. |
 | [FREIGHT_DATASET_SCHEMA.md](./FREIGHT_DATASET_SCHEMA.md) | Unified freight forecasting dataset: row grain, features, targets, temporal-integrity (no-leakage) rules. |
+| [FREIGHT_FORECAST_UNCERTAINTY.md](./FREIGHT_FORECAST_UNCERTAINTY.md) | How forecast uncertainty is computed: quantile-regression intervals + the confidence formula (no arbitrary numbers). |
 | [BUSINESS_REQUIREMENTS.md](./BUSINESS_REQUIREMENTS.md) | Business context, stakeholders, value drivers, success metrics (KPIs). |
 | [FUNCTIONAL_REQUIREMENTS.md](./FUNCTIONAL_REQUIREMENTS.md) | The 23 platform capabilities specified as testable functional requirements. |
 | [NON_FUNCTIONAL_REQUIREMENTS.md](./NON_FUNCTIONAL_REQUIREMENTS.md) | Performance, scalability, security, reliability, explainability, and compliance requirements. |

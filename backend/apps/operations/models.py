@@ -648,6 +648,11 @@ class FreightForecast(TimeStampedModel):
     upper_bound = models.DecimalField(
         max_digits=12, decimal_places=2, null=True, blank=True, validators=NON_NEGATIVE
     )
+    # Confidence score in [0, 1] from the ML uncertainty layer (see
+    # docs/FREIGHT_FORECAST_UNCERTAINTY.md). Null when not provided.
+    confidence = models.DecimalField(
+        max_digits=4, decimal_places=3, null=True, blank=True, validators=SCORE
+    )
     currency = models.CharField(max_length=3, default="USD")
 
     model_name = models.CharField(max_length=80, blank=True)

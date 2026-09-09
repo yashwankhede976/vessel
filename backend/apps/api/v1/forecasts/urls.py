@@ -1,14 +1,16 @@
 """Forecasts domain API routes (v1).
 
-Scaffold only: the router is intentionally empty. Register ViewSets here as
-freight/ETA forecast endpoints are implemented. See docs/API_CONVENTIONS.md.
+- freight/   composed freight forecast for a lane (historical + forecast +
+             confidence + model metadata + data freshness)
+
+See docs/API_CONVENTIONS.md. ETA forecast endpoints will be added here later.
 """
-from rest_framework.routers import DefaultRouter
+from django.urls import path
+
+from .views import FreightForecastView
 
 app_name = "forecasts"
 
-router = DefaultRouter()
-# router.register("freight-forecasts", FreightForecastViewSet, basename="freight-forecast")
-# router.register("eta-forecasts", ETAForecastViewSet, basename="eta-forecast")
-
-urlpatterns = router.urls
+urlpatterns = [
+    path("freight/", FreightForecastView.as_view(), name="freight"),
+]

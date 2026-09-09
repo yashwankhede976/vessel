@@ -120,10 +120,13 @@ def test_saved_model_can_be_loaded_and_predict():
         out = run_and_store(df, artifact_dir=Path(d))
         model_files = list(out.glob(f"{MODEL_NAME}_h*.joblib"))
         feats = json.loads((out / "feature_list.json").read_text())
-        model = joblib.load(model_files[0])
+        # Each artifact is now a bundle: {"point","lower","upper"}.
+        bundle = joblib.load(model_files[0])
+        _assert(set(bundle.keys()) == {"point", "lower", "upper"},
+                "artifact must be a point+quantile bundle")
         X = pd.DataFrame([[0.0] * len(feats)], columns=feats)
-        pred = model.predict(X)
-        _assert(pred.shape == (1,), "loaded model must predict")
+        pred = bundle["point"].predict(X)
+        _assert(pred.shape == (1,), "loaded point model must predict")
 
 
 def _run_all():
