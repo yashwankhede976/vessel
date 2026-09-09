@@ -45,6 +45,14 @@ MAX_CONGESTION_DELAY_DAYS = 6.0
 BASE_REL_SIGMA = 0.05       # >=5% timing uncertainty even on a clean voyage
 DELAY_REL_SIGMA = 0.60      # additional sigma scaled by the delay fraction
 
+# Delay-probability threshold: the voyage is considered "materially late" if it
+# arrives more than this fraction beyond the clean (delay-free) transit time.
+# delay_probability is P(actual > clean_transit * (1 + LATE_THRESHOLD_FRACTION))
+# under the same Normal(total_hours, sigma_hours) model used for the percentiles.
+LATE_THRESHOLD_FRACTION = 0.10   # >10% over clean transit == a meaningful delay
+# Delay causes contributing at least this many hours are surfaced as reasons.
+MATERIAL_DELAY_HOURS = 1.0
+
 # Standard-normal z-scores for the requested percentiles (one-sided, later).
 Z_P50 = 0.0
 Z_P80 = 0.8416
@@ -96,6 +104,12 @@ class ETAResult:
     total_delay_hours: float
     delay_causes: list[DelayCause]
     inputs: dict
+    # Probability (0..1) the voyage arrives materially late vs a clean transit
+    # (see LATE_THRESHOLD_FRACTION). Deterministic from the same ETA
+    # distribution used for the percentiles. Defaults keep older callers valid.
+    delay_probability: float = 0.0
+    # The material delay causes (>= MATERIAL_DELAY_HOURS), highest first.
+    delay_reasons: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict:
         d = asdict(self)
@@ -199,6 +213,26 @@ def predict_eta(inp: ETAInput) -> ETAResult:
 
     point_eta = departure + timedelta(hours=total_hours)
 
+    # --- delay probability: P(actual > clean_transit * (1 + threshold)) ---
+    # Model actual arrival as Normal(total_hours, sigma_hours) (the same
+    # distribution the percentiles come from). The "late" threshold is a
+    # documented fraction over the clean (delay-free) transit time.
+    late_threshold_hours = clean_transit_hours * (1.0 + LATE_THRESHOLD_FRACTION)
+    if sigma_hours > 0:
+        # Standard-normal upper-tail: 1 - CDF(z), CDF via erf.
+        z = (late_threshold_hours - total_hours) / sigma_hours
+        delay_probability = 0.5 * math.erfc(z / math.sqrt(2.0))
+    else:
+        delay_probability = 1.0 if total_hours > late_threshold_hours else 0.0
+    delay_probability = max(0.0, min(1.0, delay_probability))
+
+    # --- delay reasons: the material contributors, largest first ---
+    delay_reasons = [
+        c.cause
+        for c in sorted(delay_causes, key=lambda c: c.delay_hours, reverse=True)
+        if c.delay_hours >= MATERIAL_DELAY_HOURS
+    ]
+
     return ETAResult(
         eta=point_eta.isoformat(),
         eta_p50=at_percentile(Z_P50).isoformat(),
@@ -209,4 +243,6 @@ def predict_eta(inp: ETAInput) -> ETAResult:
         total_delay_hours=round(total_delay_hours, 2),
         delay_causes=delay_causes,
         inputs=asdict(inp) | {"departure_time": departure.isoformat()},
+        delay_probability=round(delay_probability, 4),
+        delay_reasons=delay_reasons,
     )

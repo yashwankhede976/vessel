@@ -28,6 +28,18 @@ urlpatterns = [
     path("recommendations/", include("apps.api.v1.recommendations.urls")),
     path("alerts/", include("apps.api.v1.alerts.urls")),
 
+    # Decision-support / analytics endpoints.
+    path("market-pressure/", include("apps.api.v1.market_pressure.urls")),
+    path("congestion/", include("apps.api.v1.congestion.urls")),
+    path("eta/", include("apps.api.v1.eta.urls")),
+    path("voyage-cost/", include("apps.api.v1.voyage_cost.urls")),
+    path("landed-cost/", include("apps.api.v1.landed_cost.urls")),
+    path("contract-strategy/", include("apps.api.v1.contract_strategy.urls")),
+    path("alternative-port/", include("apps.api.v1.alternative_port.urls")),
+    path("idle-vessel/", include("apps.api.v1.idle_vessel.urls")),
+    path("risk/", include("apps.api.v1.risk.urls")),
+    path("fix-wait/", include("apps.api.v1.fix_wait.urls")),
+
     # OpenAPI schema + interactive documentation.
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path(

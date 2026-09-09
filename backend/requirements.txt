@@ -9,3 +9,6 @@ gunicorn==22.0.0
 # Optional: only needed to run the live AISStream WebSocket consumer.
 # The adapter imports it lazily; tests and the rest of the app do not require it.
 websockets==12.0
+# Mathematical optimization (multi-voyage procurement MILP). Imported lazily by
+# apps.decisions.services.optimization; the rest of the app does not require it.
+ortools==9.15.6755

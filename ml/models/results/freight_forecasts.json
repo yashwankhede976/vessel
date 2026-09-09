@@ -1,0 +1,118 @@
+{
+  "model_name": "freight_gbm_xgboost",
+  "model_version": "0.2.0",
+  "dataset_version": "synthetic-demo",
+  "dataset_kind": "SYNTHETIC",
+  "data_kind": "FORECAST",
+  "generated_at": "2026-09-09T18:37:26.004949+00:00",
+  "trained_at": "2026-09-09T18:37:25.995602+00:00",
+  "feature_count": 40,
+  "horizons": [
+    7,
+    14,
+    30
+  ],
+  "metrics": {
+    "7": {
+      "horizon_days": 7,
+      "target_column": "future_7d_freight",
+      "metrics": {
+        "n": 16,
+        "mae": 1.1480154037475587,
+        "rmse": 1.227408031972923,
+        "mape_pct": 8.600798070557087,
+        "interval_coverage": 0.125
+      },
+      "baseline_metrics": {
+        "n": 16,
+        "mae": 0.42125000000000035,
+        "rmse": 0.4977072432665615,
+        "mape_pct": 3.123712957481673
+      },
+      "improvement_pct": {
+        "mae": -172.53,
+        "rmse": -146.61
+      }
+    },
+    "14": {
+      "horizon_days": 14,
+      "target_column": "future_14d_freight",
+      "metrics": {
+        "n": 2,
+        "mae": 0.5943281555175783,
+        "rmse": 0.7068378233071375,
+        "mape_pct": 4.279541460628336,
+        "interval_coverage": 0.0
+      },
+      "baseline_metrics": {
+        "n": 2,
+        "mae": 0.6900000000000004,
+        "rmse": 0.8700574693662487,
+        "mape_pct": 4.9267182009838395
+      },
+      "improvement_pct": {
+        "mae": 13.87,
+        "rmse": 18.76
+      }
+    },
+    "30": {
+      "horizon_days": 30,
+      "target_column": "future_30d_freight",
+      "metrics": {
+        "n": 0
+      },
+      "baseline_metrics": {},
+      "improvement_pct": {}
+    }
+  },
+  "forecasts": [
+    {
+      "origin": "Australia",
+      "destination": "Paradip",
+      "vessel_type": "capesize",
+      "as_of_date": "2026-03-01",
+      "horizon_days": 7,
+      "target_date": "2026-03-08",
+      "predicted_rate_per_tonne": 12.83,
+      "lower_bound": 12.83,
+      "upper_bound": 13.88,
+      "confidence": 0.71
+    },
+    {
+      "origin": "Australia",
+      "destination": "Paradip",
+      "vessel_type": "capesize",
+      "as_of_date": "2026-03-01",
+      "horizon_days": 14,
+      "target_date": "2026-03-15",
+      "predicted_rate_per_tonne": 13.24,
+      "lower_bound": 13.24,
+      "upper_bound": 13.41,
+      "confidence": 0.94
+    },
+    {
+      "origin": "Indonesia",
+      "destination": "Visakhapatnam",
+      "vessel_type": "panamax",
+      "as_of_date": "2026-03-01",
+      "horizon_days": 7,
+      "target_date": "2026-03-08",
+      "predicted_rate_per_tonne": 13.5,
+      "lower_bound": 13.08,
+      "upper_bound": 13.5,
+      "confidence": 0.87
+    },
+    {
+      "origin": "Indonesia",
+      "destination": "Visakhapatnam",
+      "vessel_type": "panamax",
+      "as_of_date": "2026-03-01",
+      "horizon_days": 14,
+      "target_date": "2026-03-15",
+      "predicted_rate_per_tonne": 12.92,
+      "lower_bound": 12.5,
+      "upper_bound": 13.72,
+      "confidence": 0.68
+    }
+  ]
+}
