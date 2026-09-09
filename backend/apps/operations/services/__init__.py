@@ -9,10 +9,20 @@ from .congestion import (
     Classification,
     score_congestion,
 )
+from .eta import (
+    ETAInput,
+    ETAResult,
+    ETAValidationError,
+    predict_eta,
+)
 
 __all__ = [
     "CongestionInput",
     "CongestionResult",
     "Classification",
     "score_congestion",
+    "ETAInput",
+    "ETAResult",
+    "ETAValidationError",
+    "predict_eta",
 ]
