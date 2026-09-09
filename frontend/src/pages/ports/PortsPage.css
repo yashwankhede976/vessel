@@ -1,0 +1,39 @@
+.ports-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: var(--sp-4);
+  align-items: start;
+}
+
+.ports-layout__left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  position: sticky;
+  top: var(--sp-2);
+}
+
+.ports-layout__main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-width: 0;
+}
+
+.ports-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+@media (max-width: 1000px) {
+  .ports-layout {
+    grid-template-columns: 1fr;
+  }
+  .ports-layout__left {
+    position: static;
+  }
+}

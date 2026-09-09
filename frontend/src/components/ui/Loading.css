@@ -1,0 +1,35 @@
+.ui-loading {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+}
+
+.ui-loading--fill {
+  display: flex;
+  justify-content: center;
+  padding: var(--sp-8) var(--sp-4);
+  width: 100%;
+}
+
+.ui-loading__spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--color-border-strong);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: ui-spin 0.7s linear infinite;
+}
+
+@keyframes ui-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-loading__spinner {
+    animation-duration: 2s;
+  }
+}

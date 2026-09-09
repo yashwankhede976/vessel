@@ -1,0 +1,83 @@
+.ecmap {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--sp-3);
+}
+
+.ecmap__svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.ecmap__sea {
+  fill: #eaf2f5;
+}
+
+.ecmap__coast {
+  stroke: var(--color-border-strong);
+  stroke-width: 2;
+  stroke-dasharray: 4 3;
+  opacity: 0.7;
+}
+
+.ecmap__label {
+  fill: var(--color-text-subtle);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ecmap__pin {
+  cursor: pointer;
+}
+
+.ecmap__dot {
+  fill: var(--color-navy-600);
+  stroke: #fff;
+  stroke-width: 2;
+  transition: fill 0.15s ease;
+}
+
+.ecmap__pin:hover .ecmap__dot {
+  fill: var(--color-accent);
+}
+
+.ecmap__pin--active .ecmap__dot {
+  fill: var(--color-accent);
+}
+
+.ecmap__pinlabel {
+  font-size: 10px;
+  fill: var(--color-text);
+  font-weight: 500;
+}
+
+.ecmap__pin--active .ecmap__pinlabel {
+  font-weight: 700;
+  fill: var(--color-navy-800);
+}
+
+.ecmap__pin:focus-visible {
+  outline: none;
+}
+.ecmap__pin:focus-visible .ecmap__dot {
+  stroke: var(--color-accent);
+  stroke-width: 3;
+}
+
+.ecmap__note {
+  margin: var(--sp-2) 0 0;
+  font-size: var(--fs-xs);
+  color: var(--color-text-subtle);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ecmap__dot {
+    transition: none;
+  }
+}

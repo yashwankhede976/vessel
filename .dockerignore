@@ -1,0 +1,12 @@
+# Keep build contexts small and avoid copying local/dev artifacts into images.
+**/.venv
+**/node_modules
+**/dist
+**/__pycache__
+**/*.pyc
+**/.pytest_cache
+**/db.sqlite3
+**/.env
+.git
+data/raw
+data/processed

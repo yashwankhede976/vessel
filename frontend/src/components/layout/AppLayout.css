@@ -1,0 +1,35 @@
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-layout__body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.app-layout__content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--sp-5) var(--sp-6);
+}
+
+.app-layout__backdrop {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .app-layout__content {
+    padding: var(--sp-4);
+  }
+  .app-layout__backdrop {
+    display: block;
+    position: fixed;
+    inset: var(--topnav-height) 0 0 0;
+    background: rgba(11, 31, 51, 0.4);
+    z-index: 30;
+  }
+}

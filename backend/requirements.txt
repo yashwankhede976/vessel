@@ -1,0 +1,8 @@
+# Backend runtime dependencies (pinned). Keep minimal — no business features yet.
+Django==5.0.6
+djangorestframework==3.15.1
+django-cors-headers==4.3.1
+django-environ==0.11.2
+django-filter==24.2
+drf-spectacular==0.27.2
+gunicorn==22.0.0

@@ -1,0 +1,56 @@
+.port-card {
+  all: unset;
+  display: block;
+  cursor: pointer;
+  border-radius: var(--radius-lg);
+}
+
+.port-card:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.port-card .ui-card {
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.port-card:hover .ui-card {
+  border-color: var(--color-accent);
+}
+
+.port-card--selected .ui-card {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent);
+}
+
+.port-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+
+.port-card__name {
+  margin: 0;
+  font-weight: 600;
+  color: var(--color-navy-800);
+}
+
+.port-card__sub {
+  margin: 2px 0 0;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.port-card__coords {
+  margin: var(--sp-2) 0 0;
+  font-size: var(--fs-xs);
+  color: var(--color-text-subtle);
+  font-family: var(--font-mono);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .port-card .ui-card {
+    transition: none;
+  }
+}

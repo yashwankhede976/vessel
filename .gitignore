@@ -1,0 +1,41 @@
+# ---- Secrets / environment ----
+# Never commit real secrets. .env holds local real values; .env.example is committed.
+.env
+.env.*
+!.env.example
+
+# ---- Python / Django (backend) ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+db.sqlite3
+backend/staticfiles/
+
+# ---- Node / React (frontend) ----
+node_modules/
+frontend/dist/
+frontend/.vite/
+*.log
+npm-debug.log*
+
+# ---- Data & ML artifacts (not versioned in Git) ----
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/**/README.md
+ml/artifacts/
+*.pkl
+*.joblib
+
+# ---- OS / editor ----
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
