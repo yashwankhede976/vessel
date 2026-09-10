@@ -13,7 +13,7 @@ import OptimizerPage from "./pages/OptimizerPage";
 import ScenariosPage from "./pages/ScenariosPage";
 import RiskPage from "./pages/RiskPage";
 import AlertsPage from "./pages/AlertsPage";
-import AssistantPage from "./pages/AssistantPage";
+import ChatbotPage from "./pages/ChatbotPage";
 import SettingsPage from "./pages/SettingsPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
@@ -41,7 +41,7 @@ export const routes: RouteObject[] = [
       { path: "scenarios", element: <ScenariosPage /> },
       { path: "risk", element: <RiskPage /> },
       { path: "alerts", element: <AlertsPage /> },
-      { path: "assistant", element: <AssistantPage /> },
+      { path: "chatbot", element: <ChatbotPage /> },
       { path: "settings", element: <SettingsPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],

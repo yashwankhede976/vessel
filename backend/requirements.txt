@@ -16,3 +16,7 @@ websockets==12.0
 # Mathematical optimization (multi-voyage procurement MILP). Imported lazily by
 # apps.decisions.services.optimization; the rest of the app does not require it.
 ortools==9.15.6755
+# OpenAI SDK — powers the AI chatbot (apps.decisions.services.chatbot). Imported
+# lazily; when OPENAI_API_KEY is unset the chatbot falls back to a grounded
+# rule-based answer and this package is not required at runtime.
+openai==1.54.3

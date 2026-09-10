@@ -44,12 +44,14 @@ action: fix now, wait, partially fix, or monitor, with an expected freight move
 and an effective confidence. This is the difference between "here is a chart"
 and "here is what to do and why."
 
-## 5. A grounded assistant
+## 5. A grounded chatbot
 
-`POST /api/v1/decision/assistant/` answers common chartering questions from real
-backend output. It returns `grounded: true` and the `data` it used. It is
-designed to refuse to invent numbers it cannot compute — the answer is tied to
-the same engines the decision endpoint uses.
+`POST /api/v1/chat/` answers common chartering questions in natural language,
+grounded in real backend output (freight forecast, vessel, cost, contract, risk,
+FIX/WAIT). The OpenAI key is backend-only; when unset the chatbot falls back to a
+deterministic grounded answer. It is designed to refuse to invent numbers it
+cannot compute — the answer is tied to the same engines the decision endpoint
+uses. See `docs/CHATBOT.md`.
 
 ## 6. Scenario / what-if reusing the same engines
 

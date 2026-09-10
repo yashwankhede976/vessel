@@ -37,9 +37,3 @@ class DecisionRequestSerializer(serializers.Serializer):
                 {"laycan_end": "laycan_end cannot be before laycan_start."}
             )
         return attrs
-
-
-class AssistantRequestSerializer(serializers.Serializer):
-    """A free-text question for the assistant."""
-
-    question = serializers.CharField(required=True)

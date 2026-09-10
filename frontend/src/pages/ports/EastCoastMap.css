@@ -102,3 +102,31 @@
   opacity: 1;
   outline: none;
 }
+
+/* Voyage route overlay (origin -> destination lines). */
+.ecmap__route { cursor: default; }
+.ecmap__route[role="button"] { cursor: pointer; }
+.ecmap__route-line {
+  stroke: var(--color-accent);
+  stroke-width: 1.6;
+  stroke-dasharray: 5 3;
+  opacity: 0.8;
+  fill: none;
+}
+.ecmap__route[role="button"]:hover .ecmap__route-line,
+.ecmap__route[role="button"]:focus-visible .ecmap__route-line {
+  stroke-width: 2.4;
+  opacity: 1;
+  outline: none;
+}
+.ecmap__route-arrowhead { fill: var(--color-accent); }
+.ecmap__route-origin {
+  fill: var(--color-navy-800);
+  stroke: #fff;
+  stroke-width: 1.5;
+}
+.ecmap__route-label {
+  font-size: 9px;
+  fill: var(--color-text-subtle);
+  font-weight: 600;
+}

@@ -135,6 +135,15 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     # --- Content negotiation defaults ---
     "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser"],
+    # --- Throttling (scoped; only applied where a view opts in, e.g. chat) ---
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.ScopedRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        # AI chat is the only scoped-throttled endpoint for now. Bounds abuse
+        # and OpenAI spend. Tune via deployment as needed.
+        "chat": env("CHAT_THROTTLE_RATE", default="30/min"),
+    },
 }
 
 # OpenAPI / documentation (drf-spectacular).
@@ -193,6 +202,24 @@ EXTERNAL_APIS = {
     "WORLD_BANK_BASE_URL": env(
         "WORLD_BANK_BASE_URL", default="https://api.worldbank.org/v2"
     ),
+}
+
+# =============================================================================
+# OpenAI (AI chatbot) — BACKEND ONLY.
+# -----------------------------------------------------------------------------
+# The API key is read from the environment and is NEVER sent to the frontend or
+# logged. When OPENAI_API_KEY is unset the chatbot degrades gracefully to a
+# deterministic, grounded rule-based answer (no external call). See
+# docs/SECURITY.md and docs/CHATBOT.md.
+# =============================================================================
+OPENAI = {
+    "API_KEY": env("OPENAI_API_KEY", default=""),
+    # Currently supported, cost-effective default; override per deployment.
+    "MODEL": env("OPENAI_MODEL", default="gpt-4o-mini"),
+    # Request timeout (seconds) so a slow/hung call never blocks the API.
+    "TIMEOUT": env.float("OPENAI_TIMEOUT", default=20.0),
+    # Cap output length to keep responses tight and costs bounded.
+    "MAX_OUTPUT_TOKENS": env.int("OPENAI_MAX_OUTPUT_TOKENS", default=600),
 }
 
 # =============================================================================

@@ -59,6 +59,7 @@ class VesselSerializer(serializers.ModelSerializer):
             "availability_status",
             "availability_status_display",
             "open_date",
+            "metadata",
             "latest_position",
             "created_at",
             "updated_at",

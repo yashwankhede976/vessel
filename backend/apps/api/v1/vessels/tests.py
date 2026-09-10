@@ -36,6 +36,19 @@ class VesselApiTests(APITestCase):
             dwt=Decimal("82000"), loa=Decimal("229"), beam=Decimal("32.2"),
             draft=Decimal("14.4"), availability_status=Vessel.AvailabilityStatus.OPEN,
             open_date=date(2026, 10, 5),
+            metadata={
+                "class_society": {
+                    "value": "DNV", "source": "Owner particulars",
+                    "source_date": "2026-01-15",
+                },
+                "gear": {
+                    "value": "gearless", "source": "Owner particulars",
+                    "source_date": "2026-01-15",
+                },
+                "ice_class": {
+                    "value": "UNKNOWN", "source": "UNKNOWN", "source_date": "UNKNOWN",
+                },
+            },
         )
         cls.cape = Vessel.objects.create(
             imo="1000004", name="Cape Four", vessel_type=Vessel.VesselType.CAPESIZE,
@@ -93,6 +106,67 @@ class VesselApiTests(APITestCase):
         resp = self.client.get(reverse("v1:vessels:vessel-detail", args=[999999]))
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
         self.assertFalse(resp.json()["success"])
+
+    # ---- metadata (curated, source-referenced particulars) ----
+    def test_detail_returns_sourced_metadata(self):
+        """A vessel's curated metadata is exposed with per-field provenance
+        (value/source/source_date), and UNKNOWN is preserved, not estimated."""
+        resp = self.client.get(reverse("v1:vessels:vessel-detail", args=[self.pana.id]))
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        meta = resp.json()["data"]["metadata"]
+        self.assertEqual(meta["class_society"]["value"], "DNV")
+        self.assertEqual(meta["class_society"]["source"], "Owner particulars")
+        self.assertEqual(meta["class_society"]["source_date"], "2026-01-15")
+        self.assertEqual(meta["gear"]["value"], "gearless")
+        # Unavailable particulars are recorded as UNKNOWN rather than guessed.
+        self.assertEqual(meta["ice_class"]["value"], "UNKNOWN")
+
+    def test_metadata_defaults_to_empty_dict(self):
+        """A vessel created without metadata returns an empty object, not null."""
+        resp = self.client.get(reverse("v1:vessels:vessel-detail", args=[self.handy.id]))
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(resp.json()["data"]["metadata"], {})
+
+    def test_list_includes_metadata_field(self):
+        resp = self.client.get(reverse("v1:vessels:vessel-list"))
+        by_name = {v["name"]: v for v in resp.json()["data"]}
+        self.assertIn("metadata", by_name["Pana Three"])
+        self.assertEqual(by_name["Pana Three"]["metadata"]["class_society"]["value"], "DNV")
+
+    # ---- availability summary (by vessel type) ----
+    def test_availability_summary_aggregates_by_type(self):
+        """Counts per vessel type x availability status are real DB aggregates.
+        Fixture: handysize=open, supramax=laden, panamax=open, capesize=fixed."""
+        resp = self.client.get(reverse("v1:vessels:vessel-availability-summary"))
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.json()["data"]
+        by_type = {r["vessel_type"]: r for r in data["by_type"]}
+
+        self.assertEqual(by_type["handysize"]["total"], 1)
+        self.assertEqual(by_type["handysize"]["open"], 1)
+        self.assertEqual(by_type["supramax"]["laden"], 1)
+        self.assertEqual(by_type["supramax"]["open"], 0)
+        self.assertEqual(by_type["panamax"]["open"], 1)
+        self.assertEqual(by_type["capesize"]["fixed"], 1)
+        # open_dwt sums only the OPEN vessels of that type.
+        self.assertEqual(by_type["panamax"]["open_dwt"], "82000.00")
+        # Totals across all types.
+        self.assertEqual(data["totals"]["total"], 4)
+        self.assertEqual(data["totals"]["open"], 2)
+        self.assertEqual(data["totals"]["laden"], 1)
+        self.assertEqual(data["totals"]["fixed"], 1)
+
+    def test_availability_summary_respects_filters(self):
+        """A list filter (dwt_min) narrows the summary too."""
+        resp = self.client.get(
+            reverse("v1:vessels:vessel-availability-summary"), {"dwt_min": "100000"}
+        )
+        data = resp.json()["data"]
+        # Only the capesize (180k DWT) qualifies.
+        self.assertEqual(data["totals"]["total"], 1)
+        by_type = {r["vessel_type"]: r for r in data["by_type"]}
+        self.assertIn("capesize", by_type)
+        self.assertNotIn("panamax", by_type)
 
     # ---- filter by vessel type ----
     def test_filter_by_vessel_type(self):

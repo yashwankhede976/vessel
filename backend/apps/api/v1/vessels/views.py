@@ -10,7 +10,9 @@ No recommendation or scoring logic is implemented here.
 """
 from __future__ import annotations
 
-from django.db.models import DecimalField, OuterRef, Subquery
+from decimal import Decimal
+
+from django.db.models import Count, DecimalField, OuterRef, Q, Subquery, Sum
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -97,3 +99,65 @@ class VesselViewSet(viewsets.ReadOnlyModelViewSet):
             )
         )
         return self._list_response(queryset)
+
+    @extend_schema(summary="Vessel availability summary by vessel type")
+    @action(detail=False, methods=["get"], url_path="availability-summary")
+    def availability_summary(self, request):
+        """Aggregate the fleet by vessel type, breaking each type down by
+        availability status. Every number here is a real COUNT/SUM over the
+        Vessel table — nothing is estimated. `open_dwt` is the summed DWT of the
+        OPEN vessels of that type (chartering-relevant capacity that can be
+        fixed now).
+
+        Filters from the list endpoint apply, so e.g. ?dwt_min=60000 restricts
+        the summary to the matching vessels.
+        """
+        qs = self.filter_queryset(Vessel.objects.all())
+
+        status_field = "availability_status"
+        # One grouped query: counts per (vessel_type, status) + per-type totals
+        # and open DWT via conditional aggregation.
+        rows = (
+            qs.values("vessel_type")
+            .annotate(
+                total=Count("id"),
+                open=Count("id", filter=Q(**{status_field: Vessel.AvailabilityStatus.OPEN})),
+                laden=Count("id", filter=Q(**{status_field: Vessel.AvailabilityStatus.LADEN})),
+                ballast=Count("id", filter=Q(**{status_field: Vessel.AvailabilityStatus.BALLAST})),
+                fixed=Count("id", filter=Q(**{status_field: Vessel.AvailabilityStatus.FIXED})),
+                unknown=Count("id", filter=Q(**{status_field: Vessel.AvailabilityStatus.UNKNOWN})),
+                open_dwt=Sum("dwt", filter=Q(**{status_field: Vessel.AvailabilityStatus.OPEN})),
+            )
+            .order_by("vessel_type")
+        )
+
+        type_labels = dict(Vessel.VesselType.choices)
+        by_type = [
+            {
+                "vessel_type": r["vessel_type"],
+                "vessel_type_display": type_labels.get(r["vessel_type"], r["vessel_type"]),
+                "total": r["total"],
+                "open": r["open"],
+                "laden": r["laden"],
+                "ballast": r["ballast"],
+                "fixed": r["fixed"],
+                "unknown": r["unknown"],
+                "open_dwt": str(
+                    (r["open_dwt"] if r["open_dwt"] is not None else Decimal("0")).quantize(
+                        Decimal("0.01")
+                    )
+                ),
+            }
+            for r in rows
+        ]
+
+        totals = {
+            "total": sum(r["total"] for r in by_type),
+            "open": sum(r["open"] for r in by_type),
+            "laden": sum(r["laden"] for r in by_type),
+            "ballast": sum(r["ballast"] for r in by_type),
+            "fixed": sum(r["fixed"] for r in by_type),
+            "unknown": sum(r["unknown"] for r in by_type),
+        }
+
+        return Response({"by_type": by_type, "totals": totals})

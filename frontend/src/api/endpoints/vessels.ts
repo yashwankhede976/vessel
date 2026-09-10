@@ -1,7 +1,7 @@
 /** Vessels API. */
 import { get, getList } from "../client";
 import type { ListParams, Paginated } from "../types";
-import type { Vessel } from "../resources";
+import type { Vessel, VesselAvailabilitySummary } from "../resources";
 
 export interface VesselListParams extends ListParams {
   vessel_type?: string;
@@ -27,5 +27,12 @@ export const vesselsApi = {
   },
   available(params?: VesselListParams, signal?: AbortSignal): Promise<Paginated<Vessel>> {
     return getList<Vessel>("vessels/available/", { params, signal });
+  },
+  /** Fleet availability broken down by vessel type (real DB aggregation). */
+  availabilitySummary(
+    params?: VesselListParams,
+    signal?: AbortSignal,
+  ): Promise<VesselAvailabilitySummary> {
+    return get<VesselAvailabilitySummary>("vessels/availability-summary/", { params, signal });
   },
 };

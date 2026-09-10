@@ -96,6 +96,29 @@ export interface LatestPosition {
   timestamp: string;
 }
 
+/** A trade lane with resolved endpoint coordinates for map rendering.
+ * `drawable` is true only when both endpoints have coordinates. */
+export interface VoyageRoute {
+  id: number;
+  origin_name: string;
+  origin_country: string;
+  origin_port_name: string | null;
+  origin_latitude: string | null;
+  origin_longitude: string | null;
+  destination_name: string;
+  destination_country: string;
+  destination_latitude: string | null;
+  destination_longitude: string | null;
+  distance_nm: string | null;
+  typical_transit_days: string | null;
+  drawable: boolean;
+}
+
+/** Vessel.metadata is a bag of curated, sourced particulars keyed by name
+ * (e.g. class_society, pi_club, registered_owner, ice_class, gear, holds).
+ * Same provenance convention as PortMetadata; UNKNOWN when unavailable. */
+export type VesselMetadata = Record<string, SourcedField | undefined>;
+
 export interface Vessel {
   id: number;
   imo: string;
@@ -113,9 +136,36 @@ export interface Vessel {
   availability_status: AvailabilityStatus;
   availability_status_display: string;
   open_date: string | null;
+  metadata: VesselMetadata;
   latest_position: LatestPosition | null;
   created_at: string;
   updated_at: string;
+}
+
+/** One row of the availability-by-type summary. Every count is a real DB
+ * aggregate; `open_dwt` is the summed DWT of the OPEN vessels of that type. */
+export interface VesselAvailabilityByType {
+  vessel_type: VesselType;
+  vessel_type_display: string;
+  total: number;
+  open: number;
+  laden: number;
+  ballast: number;
+  fixed: number;
+  unknown: number;
+  open_dwt: string;
+}
+
+export interface VesselAvailabilitySummary {
+  by_type: VesselAvailabilityByType[];
+  totals: {
+    total: number;
+    open: number;
+    laden: number;
+    ballast: number;
+    fixed: number;
+    unknown: number;
+  };
 }
 
 export interface Commodity {
@@ -639,7 +689,7 @@ export interface ExternalServicesResponse {
 }
 
 // ===========================================================================
-// Unified decision layer (POST /decision/ and /decision/assistant/).
+// Unified decision layer (POST /decision/).
 // ===========================================================================
 
 export interface DecisionExplainability {
@@ -685,9 +735,26 @@ export interface DecisionResult {
   notes: string[];
 }
 
-export interface AssistantAnswer {
-  intent: string;
+// ===========================================================================
+// AI chatbot (POST /chat/). Grounded in platform data; OpenAI key is
+// backend-only and never returned here.
+// ===========================================================================
+
+/** Optional page context passed to the chatbot (all fields optional). */
+export interface ChatContext {
+  origin?: string;
+  destination?: string;
+  commodity?: string;
+  cargo_quantity?: string | number;
+  selected_vessel?: string;
+  selected_port?: string;
+  [key: string]: unknown;
+}
+
+export interface ChatResponse {
+  conversation_id: string;
   answer: string;
-  data: Record<string, unknown>;
-  grounded: boolean;
+  sources: string[];
+  data_used: string[];
+  confidence: number | null;
 }

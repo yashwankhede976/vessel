@@ -19,6 +19,7 @@ urlpatterns = [
 
     # Domain API modules.
     path("ports/", include("apps.api.v1.ports.urls")),
+    path("routes/", include("apps.api.v1.routes.urls")),
     path("vessels/", include("apps.api.v1.vessels.urls")),
     path("cargo/", include("apps.api.v1.cargo.urls")),
     path("freight/", include("apps.api.v1.freight.urls")),
@@ -42,6 +43,9 @@ urlpatterns = [
 
     # Unified decision layer.
     path("decision/", include("apps.api.v1.decision.urls")),
+
+    # AI chatbot (grounded in platform data; OpenAI key is backend-only).
+    path("chat/", include("apps.api.v1.chat.urls")),
 
     # System / observability.
     path("system/", include("apps.api.v1.system.urls")),

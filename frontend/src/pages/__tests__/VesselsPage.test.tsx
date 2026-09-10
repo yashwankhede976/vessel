@@ -21,7 +21,7 @@ const vessel = (over: Partial<Vessel> = {}): Vessel => ({
   dwt: "180000.00", loa: "292.00", beam: "45.00", draft: "18.10",
   flag: "PA", year_built: 2015, speed: "13.00",
   availability_status: "open", availability_status_display: "Open / available",
-  open_date: null, latest_position: null, created_at: "", updated_at: "", ...over,
+  open_date: null, metadata: {}, latest_position: null, created_at: "", updated_at: "", ...over,
 });
 
 describe("VesselsPage", () => {

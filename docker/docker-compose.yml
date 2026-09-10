@@ -35,9 +35,15 @@ services:
       DJANGO_DEBUG: ${DJANGO_DEBUG:-false}
       DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1}
       DATABASE_URL: ${DATABASE_URL:-postgres://vessel:changeme@db:5432/vessel}
-      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:8080}
+      # Allow the Dockerized frontend (8080) and the local Vite dev server (5173).
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:8080,http://localhost:5173}
       # Enable PostGIS geospatial columns when running on the postgis image.
       USE_POSTGIS: ${USE_POSTGIS:-false}
+      # OpenAI (AI chatbot) — passed from the host .env; BACKEND ONLY, never
+      # exposed to the frontend. Empty by default -> chatbot uses the grounded
+      # rule-based fallback (no external call).
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
     depends_on:
       db:
         condition: service_healthy

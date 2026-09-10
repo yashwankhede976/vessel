@@ -36,7 +36,7 @@ Risk / Alerts  ───────────  monitor exposure and act on ma
 ```
 
 Supporting intelligence pages (Vessels, Ports, Cargo, Idle Vessels) feed the
-decision, and Settings/Assistant round out the system.
+decision, and Settings/Chatbot round out the system.
 
 ## 2. The Decision Card
 

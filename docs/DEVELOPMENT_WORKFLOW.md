@@ -237,9 +237,24 @@ DATA_GOV_IN_API_KEY=your-data-gov-in-key
 UN_COMTRADE_API_KEY=your-comtrade-key
 # BALTIC_EXCHANGE_API_KEY=licensed-do-not-commit
 
+# AI chatbot (OpenAI) — BACKEND ONLY, never exposed to React. Optional:
+# if unset the chatbot falls back to a grounded rule-based answer.
+OPENAI_API_KEY=
+# OPENAI_MODEL=gpt-4o-mini
+
 # Frontend
 VITE_API_BASE_URL=http://localhost:8000/api/v1
 ```
+
+### AI chatbot setup
+
+- Put your real `OPENAI_API_KEY` **only** in `backend/.env` (or the deployment
+  secret store). Never in `frontend/.env`, never in a `VITE_*` variable, never
+  committed. See [SECURITY.md](./SECURITY.md).
+- The endpoint is `POST /api/v1/chat/` (see [CHATBOT.md](./CHATBOT.md)).
+  Without a key it still works via a grounded fallback.
+- Docker: `docker-compose.yml` passes `OPENAI_API_KEY` from the host env to the
+  backend container; the key is not baked into any image.
 
 ---
 

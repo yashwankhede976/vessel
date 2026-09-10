@@ -82,19 +82,22 @@ lane."*
 
 ---
 
-## 3. The grounded assistant (1 min)
+## 3. The grounded chatbot (1 min)
 
 ```bash
-curl -s -X POST http://localhost:8000/api/v1/decision/assistant/ \
+curl -s -X POST http://localhost:8000/api/v1/chat/ \
   -H 'Content-Type: application/json' \
-  -d '{"question":"should I fix now or wait?"}' | python3 -m json.tool
+  -d '{"message":"should I fix now or wait?","context":{"origin":"Australia","destination":"Paradip"}}' | python3 -m json.tool
 ```
 
-- [ ] `answer` is generated from real engine output.
-- [ ] `grounded: true` and `data` shows the values it used.
+- [ ] `answer` is generated from real engine output (OpenAI phrasing when a key
+      is set; a grounded fallback otherwise).
+- [ ] `sources` / `data_used` show which platform engines/fields were used.
+
+Or open the **Chatbot** page (`/chatbot`) and use a quick-question chip.
 
 Talking point: *"It answers from backend data — it will not invent a number it
-cannot compute."*
+cannot compute. The OpenAI key stays on the backend."*
 
 ---
 

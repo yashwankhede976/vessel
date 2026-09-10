@@ -1,0 +1,58 @@
+{
+  "_note": "Representative overseas coal-export origins with a load port and trade lanes into East Coast India, for drawing voyage routes on the map. Load-port coordinates are REAL published locations of well-known bulk-export ports; distances are approximate great-circle sailing estimates (ESTIMATED) and are labelled as such. Origins/lanes are the project's in-scope set. Idempotent, keyed on origin name and origin+destination.",
+  "origins": [
+    {
+      "name": "Australia", "country": "Australia",
+      "load_port": {
+        "name": "Newcastle (AU)", "country": "Australia", "unlocode": "AUNTL",
+        "latitude": "-32.9270", "longitude": "151.7800", "port_type": "seaport",
+        "coast": "overseas",
+        "source": "REAL (published port location)"
+      }
+    },
+    {
+      "name": "Indonesia", "country": "Indonesia",
+      "load_port": {
+        "name": "Samarinda (ID)", "country": "Indonesia", "unlocode": "IDSRI",
+        "latitude": "-0.5000", "longitude": "117.1500", "port_type": "seaport",
+        "coast": "overseas",
+        "source": "REAL (published port location)"
+      }
+    },
+    {
+      "name": "Mozambique", "country": "Mozambique",
+      "load_port": {
+        "name": "Beira (MZ)", "country": "Mozambique", "unlocode": "MZBEW",
+        "latitude": "-19.8300", "longitude": "34.8380", "port_type": "seaport",
+        "coast": "overseas",
+        "source": "REAL (published port location)"
+      }
+    },
+    {
+      "name": "USA", "country": "United States",
+      "load_port": {
+        "name": "Hampton Roads (US)", "country": "United States", "unlocode": "USORF",
+        "latitude": "36.9000", "longitude": "-76.3300", "port_type": "seaport",
+        "coast": "overseas",
+        "source": "REAL (published port location)"
+      }
+    },
+    {
+      "name": "Russia", "country": "Russia",
+      "load_port": {
+        "name": "Vostochny (RU)", "country": "Russia", "unlocode": "RUVYP",
+        "latitude": "42.7400", "longitude": "133.0700", "port_type": "seaport",
+        "coast": "overseas",
+        "source": "REAL (published port location)"
+      }
+    }
+  ],
+  "routes": [
+    {"origin": "Australia", "destination": "Paradip", "distance_nm": "6500", "typical_transit_days": "20", "source": "ESTIMATED (approx great-circle)"},
+    {"origin": "Indonesia", "destination": "Paradip", "distance_nm": "3100", "typical_transit_days": "10", "source": "ESTIMATED (approx great-circle)"},
+    {"origin": "Indonesia", "destination": "Visakhapatnam", "distance_nm": "3200", "typical_transit_days": "10", "source": "ESTIMATED (approx great-circle)"},
+    {"origin": "Mozambique", "destination": "Paradip", "distance_nm": "5200", "typical_transit_days": "17", "source": "ESTIMATED (approx great-circle)"},
+    {"origin": "USA", "destination": "Paradip", "distance_nm": "9200", "typical_transit_days": "30", "source": "ESTIMATED (approx great-circle)"},
+    {"origin": "Russia", "destination": "Visakhapatnam", "distance_nm": "5600", "typical_transit_days": "18", "source": "ESTIMATED (approx great-circle)"}
+  ]
+}

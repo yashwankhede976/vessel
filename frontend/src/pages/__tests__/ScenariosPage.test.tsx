@@ -44,9 +44,10 @@ describe("ScenariosPage", () => {
     await userEvent.click(screen.getByRole("button", { name: /Run scenario/i }));
     await waitFor(() => expect(a.voyageCost).toHaveBeenCalled());
     expect(a.risk).toHaveBeenCalled();
-    // Impact rendered.
+    // Impact rendered. Money is shown in INR via a display-only USD->INR
+    // conversion (1,922,410 USD * 83 = 159,560,030).
     expect(await screen.findByText("Total voyage cost")).toBeInTheDocument();
-    expect(screen.getByText("$1,922,410 /t".replace(" /t", ""))).toBeInTheDocument;
+    expect(screen.getByText("\u20b9159,560,030")).toBeInTheDocument();
     expect(screen.getByText(/Medium/i)).toBeInTheDocument();
   });
 

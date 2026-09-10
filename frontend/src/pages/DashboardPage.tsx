@@ -70,8 +70,11 @@ export default function DashboardPage() {
     [],
   );
   const vesselsState = useApi((signal) => api.vessels.list({ page_size: 200 }, signal), []);
+  // Voyage routes into East Coast India (origin -> destination lines).
+  const routesState = useApi((signal) => api.routes.list({ page_size: 50 }, signal), []);
   const mapPorts: Port[] = portsState.data?.items ?? [];
   const mapVessels: Vessel[] = vesselsState.data?.items ?? [];
+  const mapRoutes = routesState.data?.items ?? [];
 
   useEffect(() => {
     let active = true;
@@ -229,6 +232,7 @@ export default function DashboardPage() {
             onSelect={() => { /* navigate handled on the Ports page */ }}
             vessels={mapVessels}
             onSelectVessel={setMapVessel}
+            routes={mapRoutes}
           />
           <p className="dashboard-map__hint">
             {portsState.loading || vesselsState.loading

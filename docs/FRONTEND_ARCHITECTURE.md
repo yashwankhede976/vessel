@@ -90,7 +90,7 @@ maritime/enterprise palette; no Kpler branding or assets are used.
 | Scenarios `/scenarios` | `POST voyage-cost/`, `POST risk/` |
 | Risk `/risk` | `POST risk/` |
 | Alerts `/alerts` | `GET alerts/`, `POST alerts/{id}/acknowledge/`, `POST alerts/{id}/resolve/` |
-| AI Assistant `/assistant` | composes `market-pressure/`, `fix-wait/`, `landed-cost/compare/` |
+| Chatbot `/chatbot` | `POST chat/`, `DELETE chat/` (OpenAI key backend-only) |
 | Settings `/settings` | `GET system/external-services/` |
 
 All of these paths are registered in `backend/apps/api/v1/urls.py`. Pages

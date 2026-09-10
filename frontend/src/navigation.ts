@@ -27,7 +27,7 @@ export const NAV_ITEMS: NavItem[] = [
   { to: "/risk", label: "Risk", icon: "⚠", section: "decisions" },
   { to: "/alerts", label: "Alerts", icon: "!", section: "decisions" },
 
-  { to: "/assistant", label: "AI Assistant", icon: "✺", section: "system" },
+  { to: "/chatbot", label: "Chatbot", icon: "☉", section: "system" },
   { to: "/settings", label: "Settings", icon: "⚙", section: "system" },
 ];
 

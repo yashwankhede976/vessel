@@ -12,13 +12,15 @@ vi.mock("../api", async () => {
     ...actual,
     api: {
       ports: { list: never },
+      routes: { list: never },
       vessels: { list: never, available: never },
       alerts: { list: never },
       analytics: {
         marketPressure: never, freightForecast: never, fixWait: never,
         spotVsContract: never,
       },
-      decision: { evaluate: never, ask: never },
+      decision: { evaluate: never },
+      chat: { send: never, reset: never },
       system: { dataFreshness: never, externalServices: never },
     },
   };

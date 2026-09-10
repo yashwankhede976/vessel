@@ -286,6 +286,15 @@ class Vessel(TimeStampedModel):
     # Date the vessel becomes/became open for its next employment.
     open_date = models.DateField(blank=True, null=True)
 
+    # Curated, per-field provenance for supplementary vessel particulars that do
+    # not warrant dedicated columns (e.g. class society, P&I club, registered
+    # owner/operator, ice class, gear/cranes, holds/hatches, TPC, grain/bale
+    # capacity). Same convention as Port.metadata: each entry is
+    # {"value": ..., "source": "...", "source_date": "YYYY-MM-DD"}. Values that
+    # are unavailable from official sources are recorded as "UNKNOWN" rather than
+    # estimated. Populated by the seed importer / ingestion.
+    metadata = models.JSONField(default=dict, blank=True)
+
     class Meta:
         ordering = ["name"]
         indexes = [

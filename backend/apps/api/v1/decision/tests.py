@@ -1,8 +1,8 @@
-"""API tests for the unified decision endpoint + assistant.
+"""API tests for the unified decision endpoint.
 
 Exercises the full flow: cargo input -> forecast -> vessel -> port -> cost ->
-contract -> recommendation, plus explainability, scenario overrides, the
-assistant intents, and validation.
+contract -> recommendation, plus explainability, scenario overrides, and
+validation.
 """
 from datetime import date, timedelta
 from decimal import Decimal
@@ -147,60 +147,3 @@ class DecisionApiTests(APITestCase):
         self.assertEqual(data["freight_forecast"]["band"]["mid"], "16.50")
         # Total cost is grounded in the working rate, not zero.
         self.assertNotEqual(data["total_landed_cost"]["amount"], "0.00")
-
-
-class AssistantApiTests(APITestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.origin, _ = Origin.objects.get_or_create(
-            name="Australia", defaults={"country": "Australia"}
-        )
-        cls.port, _ = Port.objects.get_or_create(
-            name="Paradip", country="India",
-            defaults={"latitude": Decimal("20.26"), "longitude": Decimal("86.67")},
-        )
-        Route.objects.get_or_create(
-            origin=cls.origin, destination_port=cls.port,
-            defaults={"distance_nm": Decimal("6500")},
-        )
-        Vessel.objects.create(
-            imo="4200002", name="Pana Fit", vessel_type=Vessel.VesselType.PANAMAX,
-            dwt=Decimal("80000"), loa=Decimal("229"), beam=Decimal("32"),
-            draft=Decimal("13.5"), speed=Decimal("13.0"),
-            availability_status=Vessel.AvailabilityStatus.OPEN,
-        )
-
-    def _url(self):
-        return reverse("v1:decision:assistant")
-
-    def _ask(self, q):
-        resp = self.client.post(self._url(), {"question": q}, format="json")
-        self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        return resp.json()["data"]
-
-    def test_fix_or_wait_intent(self):
-        d = self._ask("Should I fix Australia to Paradip?")
-        self.assertEqual(d["intent"], "fix_or_wait")
-        self.assertTrue(d["grounded"])
-        self.assertTrue(len(d["answer"]) > 0)
-
-    def test_best_vessel_intent(self):
-        d = self._ask("Which vessel is best?")
-        self.assertEqual(d["intent"], "best_vessel")
-
-    def test_compare_ports_intent(self):
-        d = self._ask("Is Dhamra better than Paradip?")
-        self.assertEqual(d["intent"], "compare_ports")
-
-    def test_contract_intent(self):
-        d = self._ask("Spot or multi-voyage?")
-        self.assertEqual(d["intent"], "contract_choice")
-
-    def test_freight_scenario_intent(self):
-        d = self._ask("What happens if freight increases 10%?")
-        self.assertEqual(d["intent"], "freight_scenario")
-        self.assertEqual(d["data"]["scenario"]["freight_change_pct"], 10.0)
-
-    def test_missing_question_returns_400(self):
-        resp = self.client.post(self._url(), {}, format="json")
-        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)

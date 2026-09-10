@@ -1,0 +1,161 @@
+{
+  "_note": "SYNTHETIC representative dry-bulk fleet for the SIH demo. These vessels are NOT real fixtures; particulars are plausible for each class but generated for demonstration. Every metadata field records source='SYNTHETIC (demo dataset)' so nothing here is mistaken for observed truth. Dimensions per class are within realistic ranges. Availability statuses are spread across types so the availability-by-type summary is meaningful.",
+  "source": "SYNTHETIC (demo dataset)",
+  "vessels": [
+    {
+      "imo": "9700001", "name": "Kolkata Trader", "vessel_type": "handysize",
+      "dwt": "35000", "loa": "180.0", "beam": "28.0", "draft": "10.2",
+      "flag": "India", "year_built": 2016, "speed": "13.5",
+      "availability_status": "open", "open_date": "2026-09-15",
+      "metadata": {
+        "class_society": {"value": "IRS", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "gear": {"value": "geared (4x30t cranes)", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "holds_hatches": {"value": "5/5", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "ice_class": {"value": "UNKNOWN", "source": "UNKNOWN", "source_date": "UNKNOWN"}
+      }
+    },
+    {
+      "imo": "9700002", "name": "Bengal Pioneer", "vessel_type": "handysize",
+      "dwt": "37000", "loa": "182.0", "beam": "28.4", "draft": "10.5",
+      "flag": "Panama", "year_built": 2013, "speed": "13.0",
+      "availability_status": "laden", "open_date": null,
+      "metadata": {
+        "class_society": {"value": "DNV", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "gear": {"value": "geared (4x30t cranes)", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "holds_hatches": {"value": "5/5", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"}
+      }
+    },
+    {
+      "imo": "9700003", "name": "Vizag Spirit", "vessel_type": "supramax",
+      "dwt": "56000", "loa": "190.0", "beam": "32.2", "draft": "12.6",
+      "flag": "Marshall Islands", "year_built": 2018, "speed": "14.0",
+      "availability_status": "open", "open_date": "2026-09-18",
+      "metadata": {
+        "class_society": {"value": "ABS", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "gear": {"value": "geared (4x35t cranes)", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "holds_hatches": {"value": "5/5", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"}
+      }
+    },
+    {
+      "imo": "9700004", "name": "Coromandel Star", "vessel_type": "supramax",
+      "dwt": "58000", "loa": "195.0", "beam": "32.3", "draft": "12.8",
+      "flag": "Singapore", "year_built": 2015, "speed": "13.8",
+      "availability_status": "ballast", "open_date": "2026-09-22",
+      "metadata": {
+        "class_society": {"value": "LR", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "gear": {"value": "geared (4x35t cranes)", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "holds_hatches": {"value": "5/5", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"}
+      }
+    },
+    {
+      "imo": "9700005", "name": "Ultra Deccan", "vessel_type": "ultramax",
+      "dwt": "63500", "loa": "199.9", "beam": "32.3", "draft": "13.3",
+      "flag": "Hong Kong", "year_built": 2020, "speed": "14.2",
+      "availability_status": "open", "open_date": "2026-09-16",
+      "metadata": {
+        "class_society": {"value": "ClassNK", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "gear": {"value": "geared (4x36t cranes)", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "holds_hatches": {"value": "5/5", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"}
+      }
+    },
+    {
+      "imo": "9700006", "name": "Ultra Konkan", "vessel_type": "ultramax",
+      "dwt": "64000", "loa": "200.0", "beam": "32.3", "draft": "13.4",
+      "flag": "Liberia", "year_built": 2019, "speed": "14.0",
+      "availability_status": "fixed", "open_date": null,
+      "metadata": {
+        "class_society": {"value": "DNV", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "gear": {"value": "geared (4x36t cranes)", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "holds_hatches": {"value": "5/5", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"}
+      }
+    },
+    {
+      "imo": "9700007", "name": "Paradip Panamax", "vessel_type": "panamax",
+      "dwt": "76000", "loa": "225.0", "beam": "32.2", "draft": "14.0",
+      "flag": "Panama", "year_built": 2014, "speed": "13.5",
+      "availability_status": "open", "open_date": "2026-09-14",
+      "metadata": {
+        "class_society": {"value": "ABS", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "gear": {"value": "gearless", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "holds_hatches": {"value": "7/7", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"}
+      }
+    },
+    {
+      "imo": "9700008", "name": "Bay Navigator", "vessel_type": "panamax",
+      "dwt": "78000", "loa": "229.0", "beam": "32.3", "draft": "14.2",
+      "flag": "Marshall Islands", "year_built": 2012, "speed": "13.2",
+      "availability_status": "laden", "open_date": null,
+      "metadata": {
+        "class_society": {"value": "LR", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "gear": {"value": "gearless", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "holds_hatches": {"value": "7/7", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"}
+      }
+    },
+    {
+      "imo": "9700009", "name": "Kamsar Voyager", "vessel_type": "kamsarmax",
+      "dwt": "82000", "loa": "229.0", "beam": "32.3", "draft": "14.4",
+      "flag": "Singapore", "year_built": 2021, "speed": "14.0",
+      "availability_status": "open", "open_date": "2026-09-20",
+      "metadata": {
+        "class_society": {"value": "DNV", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "gear": {"value": "gearless", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "holds_hatches": {"value": "7/7", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"}
+      }
+    },
+    {
+      "imo": "9700010", "name": "Kamsar Empress", "vessel_type": "kamsarmax",
+      "dwt": "82500", "loa": "229.0", "beam": "32.3", "draft": "14.4",
+      "flag": "Hong Kong", "year_built": 2017, "speed": "13.9",
+      "availability_status": "ballast", "open_date": "2026-09-25",
+      "metadata": {
+        "class_society": {"value": "ClassNK", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "gear": {"value": "gearless", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "holds_hatches": {"value": "7/7", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"}
+      }
+    },
+    {
+      "imo": "9700011", "name": "Post-Panamax Rider", "vessel_type": "post_panamax",
+      "dwt": "95000", "loa": "245.0", "beam": "38.0", "draft": "14.9",
+      "flag": "Liberia", "year_built": 2016, "speed": "14.0",
+      "availability_status": "open", "open_date": "2026-09-19",
+      "metadata": {
+        "class_society": {"value": "ABS", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "gear": {"value": "gearless", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "holds_hatches": {"value": "7/7", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"}
+      }
+    },
+    {
+      "imo": "9700012", "name": "Cape Meridian", "vessel_type": "capesize",
+      "dwt": "180000", "loa": "292.0", "beam": "45.0", "draft": "18.1",
+      "flag": "Panama", "year_built": 2015, "speed": "13.0",
+      "availability_status": "open", "open_date": "2026-09-21",
+      "metadata": {
+        "class_society": {"value": "DNV", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "gear": {"value": "gearless", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "holds_hatches": {"value": "9/9", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"}
+      }
+    },
+    {
+      "imo": "9700013", "name": "Cape Horizon", "vessel_type": "capesize",
+      "dwt": "185000", "loa": "294.0", "beam": "47.0", "draft": "18.2",
+      "flag": "Marshall Islands", "year_built": 2011, "speed": "12.8",
+      "availability_status": "fixed", "open_date": null,
+      "metadata": {
+        "class_society": {"value": "LR", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "gear": {"value": "gearless", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "holds_hatches": {"value": "9/9", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"}
+      }
+    },
+    {
+      "imo": "9700014", "name": "Cape Aurora", "vessel_type": "capesize",
+      "dwt": "205000", "loa": "300.0", "beam": "50.0", "draft": "18.3",
+      "flag": "Singapore", "year_built": 2019, "speed": "13.2",
+      "availability_status": "laden", "open_date": null,
+      "metadata": {
+        "class_society": {"value": "ClassNK", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "gear": {"value": "gearless", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"},
+        "holds_hatches": {"value": "9/9", "source": "SYNTHETIC (demo dataset)", "source_date": "2026-09-01"}
+      }
+    }
+  ]
+}

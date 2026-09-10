@@ -64,7 +64,7 @@ Demo-ready (verified). For the authoritative, honest verified state — test cou
 **Working (verified via passing test suites and a live Docker run):**
 
 - **Backend (Django + DRF):** apps for `catalog`, `operations`, `decisions`, and `ingestion`, with `/api/v1/` versioning, a consistent response envelope, pagination, filtering, and OpenAPI docs. **478 backend tests pass.**
-- **Decision layer:** `POST /api/v1/decision/` composes freight forecast, vessel recommendation, berth compatibility, congestion, ETA, demurrage, landed cost, spot-vs-contract strategy, risk scoring, and a FIX/WAIT timing call into one explainable `DecisionResult` (reasons, positive/negative factors, model versions, data freshness). A grounded assistant lives at `POST /api/v1/decision/assistant/`.
+- **Decision layer:** `POST /api/v1/decision/` composes freight forecast, vessel recommendation, berth compatibility, congestion, ETA, demurrage, landed cost, spot-vs-contract strategy, risk scoring, and a FIX/WAIT timing call into one explainable `DecisionResult` (reasons, positive/negative factors, model versions, data freshness). A grounded, OpenAI-backed chatbot lives at `POST /api/v1/chat/` (see `CHATBOT.md`).
 - **ML:** freight baselines + gradient-boosted forecasting with quantile uncertainty and no-leakage feature checks. **43 ML tests pass.**
 - **Frontend (React + TypeScript):** app shell, typed API client, executive dashboard, chartering, forecasts, decision, and port pages. **21 frontend tests pass.**
 

@@ -8,6 +8,7 @@
  * Or import individual pieces (types, hooks, error class) as needed.
  */
 import { portsApi, berthsApi } from "./endpoints/ports";
+import { routesApi } from "./endpoints/routes";
 import { vesselsApi } from "./endpoints/vessels";
 import { cargoApi } from "./endpoints/cargo";
 import { freightApi } from "./endpoints/freight";
@@ -19,11 +20,13 @@ import { optimizationApi } from "./endpoints/optimization";
 import { analyticsApi } from "./endpoints/analytics";
 import { systemApi } from "./endpoints/system";
 import { decisionApi } from "./endpoints/decision";
+import { chatApi } from "./endpoints/chat";
 
 /** Aggregated, typed API surface grouped by domain. */
 export const api = {
   ports: portsApi,
   berths: berthsApi,
+  routes: routesApi,
   vessels: vesselsApi,
   cargo: cargoApi,
   freight: freightApi,
@@ -35,8 +38,10 @@ export const api = {
   // Decision-support engines + system observability (real backend endpoints).
   analytics: analyticsApi,
   system: systemApi,
-  // Unified decision layer (composes everything + grounded assistant).
+  // Unified decision layer (composes everything into one recommendation).
   decision: decisionApi,
+  // AI chatbot (OpenAI key is backend-only; grounded in platform data).
+  chat: chatApi,
 };
 
 // Core client controls (interceptors) for app bootstrap.
