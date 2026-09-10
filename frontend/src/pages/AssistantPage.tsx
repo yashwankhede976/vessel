@@ -1,87 +1,43 @@
 import { useState } from "react";
 import PageHeader from "../components/layout/PageHeader";
-import { Card, Loading } from "../components/ui";
+import { Card, FormField, Loading } from "../components/ui";
 import { DataLabel } from "../components/domain";
 import { api, ApiError } from "../api";
-import { formatMoney, humanize } from "../lib/format";
+import type { AssistantAnswer } from "../api";
+import { humanize } from "../lib/format";
 import "./AssistantPage.css";
 
 /**
- * AI Assistant: a guided, template-driven helper that answers a small set of
- * common questions by CALLING THE EXISTING BACKEND ENGINES and summarising the
- * result. It introduces NO new backend and does NOT use an LLM — it composes the
- * deterministic decision endpoints, so every answer is explainable and grounded
- * in real backend output. (A conversational LLM layer can be added later.)
+ * AI Assistant. Sends the question to POST /decision/assistant/, which
+ * classifies the intent and answers from the real decision engines. It does NOT
+ * use an LLM and NEVER invents values — every answer is grounded in backend
+ * output (a conversational LLM layer could be added on top later).
  */
-type Intent = "fix_or_wait" | "market_read" | "cheapest_origin";
-
-const INTENTS: Array<{ id: Intent; prompt: string }> = [
-  { id: "market_read", prompt: "What is the current freight market pressure?" },
-  { id: "fix_or_wait", prompt: "Should I fix now or wait on the Australia → Paradip lane?" },
-  { id: "cheapest_origin", prompt: "Which origin is cheapest to Paradip right now?" },
+const SAMPLE_QUESTIONS = [
+  "Should I fix Australia to Paradip?",
+  "Which vessel is best?",
+  "Is Dhamra better than Paradip?",
+  "Spot or multi-voyage?",
+  "What happens if freight increases 10%?",
 ];
 
 export default function AssistantPage() {
-  const [answer, setAnswer] = useState<{ title: string; body: React.ReactNode } | null>(null);
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState<AssistantAnswer | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const ask = async (intent: Intent) => {
+  const ask = async (q: string) => {
+    const text = q.trim();
+    if (!text) return;
+    setQuestion(text);
     setLoading(true);
+    setError(null);
     setAnswer(null);
     try {
-      if (intent === "market_read") {
-        const r = await api.analytics.marketPressure({
-          vessel_supply: 0.35, cargo_demand: 0.75, port_congestion: 60, freight_volatility: 0.5,
-        });
-        setAnswer({
-          title: "Market read",
-          body: (
-            <p>
-              The Freight Market Pressure Index is <strong>{r.index.toFixed(0)}/100</strong>,
-              classified <strong>{humanize(r.classification)}</strong>. The largest
-              drivers are{" "}
-              {r.factors
-                .filter((f) => f.available)
-                .sort((a, b) => b.contribution - a.contribution)
-                .slice(0, 3)
-                .map((f) => humanize(f.factor))
-                .join(", ")}.
-            </p>
-          ),
-        });
-      } else if (intent === "fix_or_wait") {
-        const r = await api.analytics.fixWait({
-          current_rate: "22", forecast_7d: "21.5", forecast_14d: "21",
-          confidence_7d: 0.75, confidence_14d: 0.7, days_to_deadline: 30,
-        });
-        setAnswer({
-          title: "Fix / Wait",
-          body: (
-            <p>
-              Recommended action: <strong>{humanize(r.decision)}</strong>.{" "}
-              {r.reason}
-            </p>
-          ),
-        });
-      } else {
-        const cmp = await api.analytics.compareOrigins([
-          { origin: "Australia", destination: "Paradip", cargo_tonnes: "50000", commodity_cost: { amount: "5000000" }, freight_cost: { amount: "1200000" } },
-          { origin: "Indonesia", destination: "Paradip", cargo_tonnes: "50000", commodity_cost: { amount: "4800000" }, freight_cost: { amount: "900000" } },
-        ]);
-        const cheapest = cmp.entries[0];
-        setAnswer({
-          title: "Cheapest origin",
-          body: (
-            <p>
-              The lowest landed cost to Paradip is from <strong>{cheapest?.origin}</strong>{" "}
-              at {cheapest ? formatMoney(cheapest.total_landed_cost) : "—"} total.
-            </p>
-          ),
-        });
-      }
+      setAnswer(await api.decision.ask(text));
     } catch (err) {
-      const message = err instanceof ApiError ? err.displayMessage : "The assistant could not complete that request.";
-      setAnswer({ title: "Unavailable", body: <p>{message}</p> });
+      setError(err instanceof ApiError ? err.displayMessage : "The assistant could not answer that.");
     } finally {
       setLoading(false);
     }
@@ -91,14 +47,30 @@ export default function AssistantPage() {
     <>
       <PageHeader
         title="AI Assistant"
-        description="Ask a common question and the assistant answers using the platform's decision engines. Answers are grounded in real backend output — not generated prose."
+        description="Ask a chartering question and the assistant answers from the platform's decision engines. Answers are grounded in real backend output — never generated values."
       />
 
       <Card title="Ask">
+        <form
+          className="assistant-ask"
+          onSubmit={(e) => { e.preventDefault(); ask(question); }}
+        >
+          <div className="assistant-ask__field">
+            <FormField
+              label="Question"
+              placeholder="e.g. Should I fix Australia to Paradip?"
+              value={question}
+              onChange={setQuestion}
+            />
+          </div>
+          <button type="submit" className="btn btn--primary" disabled={loading}>
+            {loading ? "Thinking…" : "Ask"}
+          </button>
+        </form>
         <div className="assistant-prompts">
-          {INTENTS.map((i) => (
-            <button key={i.id} className="assistant-prompt" onClick={() => ask(i.id)} disabled={loading}>
-              {i.prompt}
+          {SAMPLE_QUESTIONS.map((q) => (
+            <button key={q} className="assistant-prompt" onClick={() => ask(q)} disabled={loading}>
+              {q}
             </button>
           ))}
         </div>
@@ -107,16 +79,18 @@ export default function AssistantPage() {
       <Card title="Answer">
         {loading ? (
           <Loading fill label="Consulting the engines…" />
+        ) : error ? (
+          <p className="assistant-error">{error}</p>
         ) : answer ? (
           <div className="assistant-answer">
             <div className="assistant-answer__head">
-              <h3>{answer.title}</h3>
+              <h3>{humanize(answer.intent)}</h3>
               <DataLabel kind="ESTIMATED" />
             </div>
-            {answer.body}
+            <p>{answer.answer}</p>
           </div>
         ) : (
-          <p className="assistant-empty">Pick a question above to get a grounded answer.</p>
+          <p className="assistant-empty">Ask a question above to get a grounded answer.</p>
         )}
       </Card>
     </>

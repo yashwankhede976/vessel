@@ -14,3 +14,12 @@
 .assistant-answer__head h3 { margin: 0; font-size: var(--fs-md); }
 .assistant-answer p { color: var(--color-text); line-height: 1.6; }
 .assistant-empty { color: var(--color-text-muted); font-size: var(--fs-sm); }
+
+.assistant-ask {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+}
+.assistant-ask__field { flex: 1; }
+.assistant-error { color: var(--color-danger); font-size: var(--fs-sm); }

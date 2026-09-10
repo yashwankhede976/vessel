@@ -637,3 +637,57 @@ export interface ExternalServicesResponse {
   generated_at: string;
   services: ExternalServiceHealth[];
 }
+
+// ===========================================================================
+// Unified decision layer (POST /decision/ and /decision/assistant/).
+// ===========================================================================
+
+export interface DecisionExplainability {
+  reasons: string[];
+  positive_factors: string[];
+  negative_factors: string[];
+  model_version: Record<string, unknown>;
+  data_freshness: FreshnessEntry[];
+}
+
+export interface DecisionResult {
+  request: Record<string, unknown>;
+  scenario: {
+    freight_change_pct: number | null;
+    congestion_score: number | null;
+    vessel_availability: number | null;
+  };
+  market: MarketPressureResult;
+  freight_forecast: {
+    lane: Record<string, unknown>;
+    band: { low: string | null; mid: string | null; high: string | null };
+    working_rate: string | null;
+    source: string;
+    freight_model: string | null;
+    freight_model_version: string | null;
+    generated_at: string | null;
+  };
+  recommended_vessel: CandidateRecommendation | null;
+  compatibility: Record<string, unknown> | null;
+  congestion: { score: number | null } | null;
+  eta: ETAResult | null;
+  demurrage: Money | null;
+  total_landed_cost: Money | null;
+  recommended_contract: SpotVsContractResult;
+  risk: RiskResult;
+  timing_decision: string; // FIX_NOW | WAIT | PARTIAL_FIX | MONITOR
+  timing: FixWaitResult;
+  expected_savings: { amount: string; currency: string } | null;
+  confidence: number | null;
+  ranked_vessels: CandidateRecommendation[];
+  excluded_vessels: ExcludedVessel[];
+  explainability: DecisionExplainability;
+  notes: string[];
+}
+
+export interface AssistantAnswer {
+  intent: string;
+  answer: string;
+  data: Record<string, unknown>;
+  grounded: boolean;
+}

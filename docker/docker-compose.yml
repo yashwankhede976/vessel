@@ -19,6 +19,11 @@ services:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-vessel} -d ${POSTGRES_DB:-vessel}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
   backend:
     build:
@@ -31,8 +36,11 @@ services:
       DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1}
       DATABASE_URL: ${DATABASE_URL:-postgres://vessel:changeme@db:5432/vessel}
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:8080}
+      # Enable PostGIS geospatial columns when running on the postgis image.
+      USE_POSTGIS: ${USE_POSTGIS:-false}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - "8000:8000"
 

@@ -20,6 +20,7 @@ export const NAV_ITEMS: NavItem[] = [
   { to: "/cargo", label: "Cargo", icon: "▣", section: "intelligence" },
   { to: "/idle-vessels", label: "Idle Vessels", icon: "◍", section: "intelligence" },
 
+  { to: "/decision", label: "Decision", icon: "◆", section: "decisions" },
   { to: "/chartering", label: "Chartering", icon: "✦", section: "decisions" },
   { to: "/optimizer", label: "Optimizer", icon: "◈", section: "decisions" },
   { to: "/scenarios", label: "Scenarios", icon: "⑃", section: "decisions" },

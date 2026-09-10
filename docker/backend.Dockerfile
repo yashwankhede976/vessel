@@ -7,17 +7,21 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# Install dependencies first (better layer caching).
+# Install dependencies first (better layer caching). A generous timeout +
+# retries make the build resilient to slow mirrors when fetching large wheels
+# (e.g. ortools).
 COPY backend/requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --timeout 120 --retries 5 -r requirements.txt
 
 # Copy the backend source.
 COPY backend/ ./
 
+# Entrypoint: migrate + seed, then run gunicorn (see backend-entrypoint.sh).
+COPY docker/backend-entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 EXPOSE 8000
 
-# Collect static files at build time (no-op friendly for the scaffold).
-# RUN python manage.py collectstatic --noinput
-
-# Run the WSGI app. DJANGO_SETTINGS_MODULE defaults to config.settings.
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
+# Run migrations + seed, then start the WSGI app.
+# DJANGO_SETTINGS_MODULE defaults to config.settings.
+CMD ["/usr/local/bin/entrypoint.sh"]

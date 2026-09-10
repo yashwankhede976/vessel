@@ -2,9 +2,11 @@
 
 **Intelligent Freight Forecasting & Vessel Chartering platform** — bulk cargo procurement and vessel chartering from overseas origins to India's East Coast ports. SIH 2026 project.
 
-This repository is a full-stack scaffold: a React + TypeScript frontend, a Django + Django REST Framework backend, and separate packages for ML, optimization, and data. It currently exposes only a health check and a minimal startup page — **no business features are implemented yet.**
+This repository is a full-stack application: a React + TypeScript frontend, a Django + Django REST Framework backend, and separate packages for ML, optimization, and data. It implements a decision-support workflow for dry-bulk chartering — freight forecasting, vessel recommendation, berth compatibility, congestion/ETA/demurrage, landed cost, spot-vs-contract strategy, risk scoring, and a FIX/WAIT timing call — composed into one explainable recommendation via `POST /api/v1/decision/`.
 
-For the product vision, requirements, architecture, data sources, and workflow, see [`docs/`](./docs/README.md).
+For the product vision, requirements, architecture, data sources, and workflow, see [`docs/`](./docs/README.md). For an SIH demo run-through, see [`docs/SIH_DEMO_CHECKLIST.md`](./docs/SIH_DEMO_CHECKLIST.md).
+
+> **Data labelling.** Values in the UI and API are labelled by nature: **REAL** (stored/observed), **FORECAST** (model prediction), **ESTIMATED** (derived/heuristic), or **SYNTHETIC** (generated for demo/seed). Do not treat ESTIMATED/SYNTHETIC values as measured truth.
 
 ## Repository structure
 
@@ -46,6 +48,14 @@ Backend (Django + DRF):
 ```
 
 Health check: http://localhost:8000/api/v1/health/ → `{"status": "ok", ...}`
+
+Unified decision endpoint (composes the full workflow):
+
+```bash
+curl -s -X POST http://localhost:8000/api/v1/decision/ \
+  -H 'Content-Type: application/json' \
+  -d '{"commodity":"coal","cargo_quantity":"100000","origin":"Australia","destination":"Paradip","laycan_start":"2026-09-15","laycan_end":"2026-09-30"}'
+```
 
 Frontend (React + TypeScript):
 
@@ -93,4 +103,10 @@ All configuration and secrets come from environment variables. Copy `.env.exampl
 
 ## Status
 
-Scaffold only: verified that the backend starts (health endpoint + passing test) and the frontend starts and builds. Business features are not implemented.
+Demo-ready (verified). Test suites currently pass: **backend 478**, **frontend 21**, **ML 43**. `docker compose -f docker/docker-compose.yml up --build` brings up db + backend + frontend and they communicate (backend runs migrations and seeds ports on startup). See the honest, verified state and known limitations in:
+
+- [`docs/FINAL_TEST_REPORT.md`](./docs/FINAL_TEST_REPORT.md) — test counts, Docker status, limitations
+- [`docs/SIH_DEMO_CHECKLIST.md`](./docs/SIH_DEMO_CHECKLIST.md) — step-by-step demo
+- [`docs/SIH_INNOVATION_POINTS.md`](./docs/SIH_INNOVATION_POINTS.md) — what is novel and why
+
+**Known limitations:** API read endpoints are intentionally public (no auth/RBAC yet); several inputs are SYNTHETIC/seed data for the demo; forecasts are model output, not measured. Do not claim functionality beyond what these docs verify.

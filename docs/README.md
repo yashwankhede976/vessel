@@ -26,8 +26,10 @@ The core intent is to shift the chartering desk from **reactive daily spot-marke
 
 | Document | Purpose |
 | --- | --- |
+| [SIH_DEMO_CHECKLIST.md](./SIH_DEMO_CHECKLIST.md) | Step-by-step SIH demo run-through (Docker bring-up, the unified decision call, dashboard, assistant, honesty slide). |
+| [FINAL_TEST_REPORT.md](./FINAL_TEST_REPORT.md) | Verified state: test counts, Docker status, workflow verification, known limitations, files changed. |
+| [SIH_INNOVATION_POINTS.md](./SIH_INNOVATION_POINTS.md) | What is novel and why, each claim backed by running code / passing tests. |
 | [PROJECT_SPECIFICATION.md](./PROJECT_SPECIFICATION.md) | Master spec: objective, users, journeys, system boundaries, MVP and future scope, assumptions, limitations. |
-| [IMPLEMENTATION_STATUS.md](./IMPLEMENTATION_STATUS.md) | What is built vs pending, per layer and per capability. The authoritative progress view. |
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | System architecture: layers, technology stack, request/ML/optimization/ingestion flows, repository structure. |
 | [DEVELOPMENT_WORKFLOW.md](./DEVELOPMENT_WORKFLOW.md) | Branching, commits, PRs, coding standards, testing, environments, and the documentation golden rule. |
 | [DATA_SOURCES.md](./DATA_SOURCES.md) | External data sources catalogue with access classification and per-field provenance rules. |
@@ -57,20 +59,16 @@ Each capability is specified in detail in [FUNCTIONAL_REQUIREMENTS.md](./FUNCTIO
 
 ## Status
 
-Implementation is underway. The specification documents below define the target;
-the platform now has a working foundation on top of them. See
-[IMPLEMENTATION_STATUS.md](./IMPLEMENTATION_STATUS.md) for the authoritative
-built-vs-pending breakdown.
+Demo-ready (verified). For the authoritative, honest verified state — test counts, Docker status, and known limitations — see [FINAL_TEST_REPORT.md](./FINAL_TEST_REPORT.md), and for the demo run-through see [SIH_DEMO_CHECKLIST.md](./SIH_DEMO_CHECKLIST.md).
 
-**Built so far (high level):**
+**Working (verified via passing test suites and a live Docker run):**
 
-- **Backend (Django + DRF):** apps for `catalog` (core domain: ports, berths, vessels, commodities, origins, routes, cargo, freight observations), `operations` (AIS positions, port calls, congestion, weather/marine/cyclone, prices, trade, bunkers, forecasts, risk, recommendations), `decisions` (charter strategies, voyage/contract plans, candidates, scenarios, optimization runs/results), and `ingestion` (a reusable ingestion framework + the AISStream adapter). DRF is configured with `/api/v1/` versioning, a consistent response envelope, pagination, filtering, and OpenAPI docs.
-- **APIs:** ports & berths (list/detail, filter by coast/commodity, constraints) and vessels (list/detail, filter by type/DWT/draft/position, availability).
-- **Domain logic:** a deterministic, rule-based vessel–port–berth compatibility engine (no ML).
-- **Data:** a curated, source-referenced East Coast India port dataset with a seed importer.
-- **Frontend (React + TypeScript):** an application shell (layout, routing, reusable UI components), a typed API client, and a working Port Intelligence page.
+- **Backend (Django + DRF):** apps for `catalog`, `operations`, `decisions`, and `ingestion`, with `/api/v1/` versioning, a consistent response envelope, pagination, filtering, and OpenAPI docs. **478 backend tests pass.**
+- **Decision layer:** `POST /api/v1/decision/` composes freight forecast, vessel recommendation, berth compatibility, congestion, ETA, demurrage, landed cost, spot-vs-contract strategy, risk scoring, and a FIX/WAIT timing call into one explainable `DecisionResult` (reasons, positive/negative factors, model versions, data freshness). A grounded assistant lives at `POST /api/v1/decision/assistant/`.
+- **ML:** freight baselines + gradient-boosted forecasting with quantile uncertainty and no-leakage feature checks. **43 ML tests pass.**
+- **Frontend (React + TypeScript):** app shell, typed API client, executive dashboard, chartering, forecasts, decision, and port pages. **21 frontend tests pass.**
 
-**Not yet built:** the ML forecasting/ETA/risk models, the optimization solvers, most domain API endpoints (cargo/freight/forecasts/optimization/recommendations/alerts/scenarios are scaffolded routers), and the remaining feature pages. Provider ingestion beyond AISStream is pending.
+**Known limitations:** API read endpoints are intentionally public (no auth/RBAC yet); several inputs are SYNTHETIC/seed data; forecasts are model output, not measured values. See [FINAL_TEST_REPORT.md](./FINAL_TEST_REPORT.md) for the full list.
 
 ## Repository layout & running it
 

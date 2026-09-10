@@ -40,6 +40,9 @@ urlpatterns = [
     path("risk/", include("apps.api.v1.risk.urls")),
     path("fix-wait/", include("apps.api.v1.fix_wait.urls")),
 
+    # Unified decision layer.
+    path("decision/", include("apps.api.v1.decision.urls")),
+
     # System / observability.
     path("system/", include("apps.api.v1.system.urls")),
 

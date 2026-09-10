@@ -18,6 +18,7 @@ vi.mock("../api", async () => {
         marketPressure: never, freightForecast: never, fixWait: never,
         spotVsContract: never,
       },
+      decision: { evaluate: never, ask: never },
       system: { dataFreshness: never, externalServices: never },
     },
   };

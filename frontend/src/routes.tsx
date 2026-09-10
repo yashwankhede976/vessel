@@ -1,6 +1,7 @@
 import { Navigate, type RouteObject } from "react-router-dom";
 import AppLayout from "./components/layout/AppLayout";
 import DashboardPage from "./pages/DashboardPage";
+import DecisionPage from "./pages/DecisionPage";
 import MarketIntelligencePage from "./pages/MarketIntelligencePage";
 import FreightForecastPage from "./pages/FreightForecastPage";
 import VesselsPage from "./pages/VesselsPage";
@@ -28,6 +29,7 @@ export const routes: RouteObject[] = [
     children: [
       { index: true, element: <Navigate to="/dashboard" replace /> },
       { path: "dashboard", element: <DashboardPage /> },
+      { path: "decision", element: <DecisionPage /> },
       { path: "market", element: <MarketIntelligencePage /> },
       { path: "forecasts", element: <FreightForecastPage /> },
       { path: "vessels", element: <VesselsPage /> },

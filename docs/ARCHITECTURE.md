@@ -426,21 +426,21 @@ vessel/
 
 ### Current implementation status
 
-The foundation is built and verified; see [IMPLEMENTATION_STATUS.md](./IMPLEMENTATION_STATUS.md) for the full breakdown. In summary:
+Demo-ready and verified; see [FINAL_TEST_REPORT.md](./FINAL_TEST_REPORT.md) for exact test counts, Docker status, and honest limitations. In summary:
 
-- **Data layer (7):** the `catalog`, `operations`, and `decisions` apps model the core, observational, and decision domains with migrations; a curated, source-referenced East Coast port dataset is seeded via a management command.
-- **API layer (2):** DRF is configured (`/api/v1/`, response envelope, pagination, filtering, OpenAPI docs); ports/berths and vessels endpoints are implemented, with the other domain routers scaffolded.
-- **Domain layer (3):** a deterministic rule-based vessel–port–berth compatibility engine is implemented (no ML). Other domain services (landed cost, risk assembly, recommendations) are pending.
-- **Ingestion layer (4):** the reusable framework and the AISStream adapter are implemented; other provider adapters are pending.
-- **Presentation layer (1):** React/TS app shell (layout, routing, reusable components), a typed API client, and the Port Intelligence page are implemented; other pages are placeholders.
-- **ML (5) and Optimization (6):** not yet implemented — the `ml/` package and OR-Tools solvers are the next major work.
+- **Data layer:** the `catalog`, `operations`, and `decisions` apps model the core, observational, and decision domains with migrations; a curated, source-referenced East Coast port dataset is seeded via a management command.
+- **API layer:** DRF is configured (`/api/v1/`, response envelope, pagination, filtering, OpenAPI docs); ports/berths, vessels, recommendations, forecasts, and the unified `decision` endpoints are implemented.
+- **Domain layer:** a deterministic rule-based vessel–port–berth compatibility engine, plus landed-cost/voyage economics, risk scoring, spot-vs-contract, fix/wait timing, and the composing `decision_engine` service.
+- **Ingestion layer:** the reusable framework and the AISStream adapter are implemented; other provider adapters are pending.
+- **Presentation layer:** React/TS app shell, a typed API client, and the executive dashboard, chartering, forecasts, decision, and port pages.
+- **ML:** freight baselines + gradient-boosted forecasting with quantile uncertainty and no-leakage feature checks (43 tests pass). **Optimization:** OR-Tools solver wired for the optimization endpoint.
 
-All implemented components ship with tests and pass the suite; migrations are in sync.
+All implemented components ship with tests: backend 478, frontend 21, ML 43 pass; migrations are in sync. Known limitations (no auth yet, synthetic/seed inputs) are listed in [FINAL_TEST_REPORT.md](./FINAL_TEST_REPORT.md).
 
 ## 16. Related documents
 
 - [README.md](./README.md)
-- [IMPLEMENTATION_STATUS.md](./IMPLEMENTATION_STATUS.md)
+- [FINAL_TEST_REPORT.md](./FINAL_TEST_REPORT.md)
 - [PROJECT_SPECIFICATION.md](./PROJECT_SPECIFICATION.md)
 - [BUSINESS_REQUIREMENTS.md](./BUSINESS_REQUIREMENTS.md)
 - [FUNCTIONAL_REQUIREMENTS.md](./FUNCTIONAL_REQUIREMENTS.md)

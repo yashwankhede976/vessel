@@ -18,6 +18,7 @@ import { scenariosApi } from "./endpoints/scenarios";
 import { optimizationApi } from "./endpoints/optimization";
 import { analyticsApi } from "./endpoints/analytics";
 import { systemApi } from "./endpoints/system";
+import { decisionApi } from "./endpoints/decision";
 
 /** Aggregated, typed API surface grouped by domain. */
 export const api = {
@@ -34,6 +35,8 @@ export const api = {
   // Decision-support engines + system observability (real backend endpoints).
   analytics: analyticsApi,
   system: systemApi,
+  // Unified decision layer (composes everything + grounded assistant).
+  decision: decisionApi,
 };
 
 // Core client controls (interceptors) for app bootstrap.
