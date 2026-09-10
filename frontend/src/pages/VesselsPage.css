@@ -1,0 +1,27 @@
+.vessels-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--sp-3);
+}
+.vessels__name {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-accent);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+.vessels__name:hover { text-decoration: underline; }
+.vessels-detail { margin: 0; display: grid; gap: var(--sp-2); }
+.vessels-detail__row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--sp-2);
+  font-size: var(--fs-sm);
+}
+.vessels-detail__row dt { color: var(--color-text-muted); margin: 0; }
+.vessels-detail__row dd { margin: 0; font-weight: 600; text-align: right; }

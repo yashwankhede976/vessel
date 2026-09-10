@@ -1,0 +1,12 @@
+.risk-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) 1fr;
+  gap: var(--sp-4);
+  align-items: start;
+}
+.risk-form { display: grid; gap: var(--sp-3); }
+.risk-result { display: grid; gap: var(--sp-4); }
+.risk-empty { color: var(--color-text-muted); font-size: var(--fs-sm); }
+@media (max-width: 900px) {
+  .risk-layout { grid-template-columns: 1fr; }
+}

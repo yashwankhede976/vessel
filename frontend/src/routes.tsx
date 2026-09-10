@@ -1,14 +1,25 @@
 import { Navigate, type RouteObject } from "react-router-dom";
 import AppLayout from "./components/layout/AppLayout";
 import DashboardPage from "./pages/DashboardPage";
-import PlaceholderPage from "./pages/PlaceholderPage";
+import MarketIntelligencePage from "./pages/MarketIntelligencePage";
+import FreightForecastPage from "./pages/FreightForecastPage";
+import VesselsPage from "./pages/VesselsPage";
 import PortsPage from "./pages/ports/PortsPage";
+import CargoPage from "./pages/CargoPage";
+import IdleVesselsPage from "./pages/IdleVesselsPage";
+import CharteringPage from "./pages/CharteringPage";
+import OptimizerPage from "./pages/OptimizerPage";
+import ScenariosPage from "./pages/ScenariosPage";
+import RiskPage from "./pages/RiskPage";
+import AlertsPage from "./pages/AlertsPage";
+import AssistantPage from "./pages/AssistantPage";
+import SettingsPage from "./pages/SettingsPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 /**
- * Application route table. `/` redirects to the dashboard; all app routes
- * render inside AppLayout. Feature pages beyond the dashboard are placeholders
- * (no API data yet).
+ * Application route table. `/` redirects to the dashboard; all app routes render
+ * inside AppLayout. Every route consumes the real backend APIs via the api
+ * client (see src/api). Paths align with navigation.ts.
  */
 export const routes: RouteObject[] = [
   {
@@ -17,133 +28,19 @@ export const routes: RouteObject[] = [
     children: [
       { index: true, element: <Navigate to="/dashboard" replace /> },
       { path: "dashboard", element: <DashboardPage /> },
-      {
-        path: "market",
-        element: (
-          <PlaceholderPage
-            title="Market"
-            description="Freight market overview, historical analytics, and rate context by lane."
-            planned={[
-              "Historical freight-rate trends and seasonality",
-              "Bunker and commodity price context",
-              "Lane comparison across origins",
-            ]}
-          />
-        ),
-      },
-      {
-        path: "vessels",
-        element: (
-          <PlaceholderPage
-            title="Vessels"
-            description="Vessel availability, tracking, and specifications."
-            planned={[
-              "Open/available tonnage by class",
-              "Live positions and ETA",
-              "Vessel–port compatibility",
-            ]}
-          />
-        ),
-      },
+      { path: "market", element: <MarketIntelligencePage /> },
+      { path: "forecasts", element: <FreightForecastPage /> },
+      { path: "vessels", element: <VesselsPage /> },
       { path: "ports", element: <PortsPage /> },
-      {
-        path: "cargo",
-        element: (
-          <PlaceholderPage
-            title="Cargo"
-            description="Cargo requirements and procurement planning."
-            planned={[
-              "Cargo requirements and laycan windows",
-              "Total landed-cost comparison",
-              "Multi-origin sourcing",
-            ]}
-          />
-        ),
-      },
-      {
-        path: "forecasts",
-        element: (
-          <PlaceholderPage
-            title="Forecasts"
-            description="Freight and ETA forecasts with confidence and explainability."
-            planned={[
-              "Short- and medium-term freight forecasts",
-              "ETA predictions",
-              "Explainable drivers and confidence bands",
-            ]}
-          />
-        ),
-      },
-      {
-        path: "optimizer",
-        element: (
-          <PlaceholderPage
-            title="Optimizer"
-            description="Sourcing, laycan, and contract-type optimization."
-            planned={[
-              "Multi-origin sourcing optimization",
-              "Laycan optimization",
-              "Spot vs short-term vs multi-voyage selection",
-            ]}
-          />
-        ),
-      },
-      {
-        path: "recommendations",
-        element: (
-          <PlaceholderPage
-            title="Recommendations"
-            description="Explainable decision recommendations with confidence and impact."
-            planned={[
-              "Market-entry timing",
-              "Contract-type and alternative-port recommendations",
-              "Explainability and audit trail",
-            ]}
-          />
-        ),
-      },
-      {
-        path: "alerts",
-        element: (
-          <PlaceholderPage
-            title="Alerts"
-            description="Material events: forecast shifts, congestion, weather, and risk."
-            planned={[
-              "Configurable alert rules",
-              "Congestion and weather warnings",
-              "Demurrage-risk breaches",
-            ]}
-          />
-        ),
-      },
-      {
-        path: "scenarios",
-        element: (
-          <PlaceholderPage
-            title="Scenarios"
-            description="What-if simulation against a base case."
-            planned={[
-              "Adjust bunker, congestion, demand, and timing",
-              "Compare scenarios vs baseline",
-              "Save and share scenarios",
-            ]}
-          />
-        ),
-      },
-      {
-        path: "settings",
-        element: (
-          <PlaceholderPage
-            title="Settings"
-            description="Application preferences and configuration."
-            planned={[
-              "Units, currency, and time zone",
-              "Data source configuration",
-              "Notification preferences",
-            ]}
-          />
-        ),
-      },
+      { path: "cargo", element: <CargoPage /> },
+      { path: "idle-vessels", element: <IdleVesselsPage /> },
+      { path: "chartering", element: <CharteringPage /> },
+      { path: "optimizer", element: <OptimizerPage /> },
+      { path: "scenarios", element: <ScenariosPage /> },
+      { path: "risk", element: <RiskPage /> },
+      { path: "alerts", element: <AlertsPage /> },
+      { path: "assistant", element: <AssistantPage /> },
+      { path: "settings", element: <SettingsPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
   },

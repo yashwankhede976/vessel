@@ -1,0 +1,24 @@
+.stat-tile__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+.stat-tile__label {
+  margin: 0;
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+.stat-tile__value {
+  margin: var(--sp-2) 0 0;
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  color: var(--color-text);
+}
+.stat-tile__note {
+  margin: var(--sp-1) 0 0;
+  font-size: var(--fs-sm);
+  color: var(--color-text-subtle);
+}

@@ -1,0 +1,7 @@
+.alerts-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--sp-3);
+}
+.alerts__actions { display: flex; gap: var(--sp-2); }
+.alerts-error { color: var(--color-danger); font-size: var(--fs-sm); margin: var(--sp-3) 0 0; }

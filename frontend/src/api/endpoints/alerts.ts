@@ -1,26 +1,29 @@
-/** Alerts API.
+/** Alerts API — the real /api/v1/alerts/ ViewSet.
  *
- * Backend endpoints are scaffolded but not yet implemented; paths follow the
- * documented convention. Acknowledge is a POST (non-idempotent, not retried).
+ * List/retrieve are GETs; acknowledge/resolve are POSTs (non-idempotent, not
+ * retried). Filter by status/alert_type/severity.
  */
 import { get, getList, post } from "../client";
 import type { ListParams, Paginated } from "../types";
-import type { Alert } from "../resources";
+import type { DecisionAlert } from "../resources";
 
 export interface AlertListParams extends ListParams {
-  severity?: string;
-  acknowledged?: boolean;
+  status?: "new" | "acknowledged" | "resolved";
   alert_type?: string;
+  severity?: string;
 }
 
 export const alertsApi = {
-  list(params?: AlertListParams, signal?: AbortSignal): Promise<Paginated<Alert>> {
-    return getList<Alert>("alerts/", { params, signal });
+  list(params?: AlertListParams, signal?: AbortSignal): Promise<Paginated<DecisionAlert>> {
+    return getList<DecisionAlert>("alerts/", { params, signal });
   },
-  retrieve(id: number, signal?: AbortSignal): Promise<Alert> {
-    return get<Alert>(`alerts/${id}/`, { signal });
+  retrieve(id: number, signal?: AbortSignal): Promise<DecisionAlert> {
+    return get<DecisionAlert>(`alerts/${id}/`, { signal });
   },
-  acknowledge(id: number): Promise<Alert> {
-    return post<Alert>(`alerts/${id}/acknowledge/`);
+  acknowledge(id: number): Promise<DecisionAlert> {
+    return post<DecisionAlert>(`alerts/${id}/acknowledge/`);
+  },
+  resolve(id: number): Promise<DecisionAlert> {
+    return post<DecisionAlert>(`alerts/${id}/resolve/`);
   },
 };

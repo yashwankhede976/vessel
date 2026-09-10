@@ -1,0 +1,16 @@
+.assistant-prompts { display: grid; gap: var(--sp-2); }
+.assistant-prompt {
+  text-align: left;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--sp-3);
+  font: inherit;
+  cursor: pointer;
+  color: var(--color-text);
+}
+.assistant-prompt:hover { border-color: var(--color-accent); }
+.assistant-answer__head { display: flex; align-items: center; gap: var(--sp-2); }
+.assistant-answer__head h3 { margin: 0; font-size: var(--fs-md); }
+.assistant-answer p { color: var(--color-text); line-height: 1.6; }
+.assistant-empty { color: var(--color-text-muted); font-size: var(--fs-sm); }

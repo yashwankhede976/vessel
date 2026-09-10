@@ -16,6 +16,8 @@ import { recommendationsApi } from "./endpoints/recommendations";
 import { alertsApi } from "./endpoints/alerts";
 import { scenariosApi } from "./endpoints/scenarios";
 import { optimizationApi } from "./endpoints/optimization";
+import { analyticsApi } from "./endpoints/analytics";
+import { systemApi } from "./endpoints/system";
 
 /** Aggregated, typed API surface grouped by domain. */
 export const api = {
@@ -29,6 +31,9 @@ export const api = {
   alerts: alertsApi,
   scenarios: scenariosApi,
   optimization: optimizationApi,
+  // Decision-support engines + system observability (real backend endpoints).
+  analytics: analyticsApi,
+  system: systemApi,
 };
 
 // Core client controls (interceptors) for app bootstrap.

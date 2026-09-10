@@ -1,7 +1,6 @@
 /**
  * Central navigation definition — the single source of truth for the sidebar
- * and the route table. `icon` is a short glyph (kept dependency-free); swap for
- * an icon component later if desired.
+ * and (conceptually) the route table. `icon` is a short glyph (dependency-free).
  */
 export interface NavItem {
   to: string;
@@ -13,18 +12,21 @@ export interface NavItem {
 
 export const NAV_ITEMS: NavItem[] = [
   { to: "/dashboard", label: "Dashboard", icon: "▤", section: "overview" },
-  { to: "/market", label: "Market", icon: "≈", section: "overview" },
+  { to: "/market", label: "Market Intelligence", icon: "≈", section: "overview" },
+  { to: "/forecasts", label: "Freight Forecast", icon: "◪", section: "overview" },
 
   { to: "/vessels", label: "Vessels", icon: "⚓", section: "intelligence" },
   { to: "/ports", label: "Ports", icon: "⚑", section: "intelligence" },
   { to: "/cargo", label: "Cargo", icon: "▣", section: "intelligence" },
-  { to: "/forecasts", label: "Forecasts", icon: "◪", section: "intelligence" },
+  { to: "/idle-vessels", label: "Idle Vessels", icon: "◍", section: "intelligence" },
 
+  { to: "/chartering", label: "Chartering", icon: "✦", section: "decisions" },
   { to: "/optimizer", label: "Optimizer", icon: "◈", section: "decisions" },
-  { to: "/recommendations", label: "Recommendations", icon: "✦", section: "decisions" },
   { to: "/scenarios", label: "Scenarios", icon: "⑃", section: "decisions" },
+  { to: "/risk", label: "Risk", icon: "⚠", section: "decisions" },
   { to: "/alerts", label: "Alerts", icon: "!", section: "decisions" },
 
+  { to: "/assistant", label: "AI Assistant", icon: "✺", section: "system" },
   { to: "/settings", label: "Settings", icon: "⚙", section: "system" },
 ];
 

@@ -81,3 +81,24 @@
     transition: none;
   }
 }
+
+/* Congestion status colouring for port dots. */
+.ecmap__dot--low { fill: var(--color-success); }
+.ecmap__dot--medium { fill: var(--color-warning); }
+.ecmap__dot--high { fill: var(--color-danger); }
+.ecmap__dot--severe { fill: #7a1a12; }
+
+/* Vessel overlay markers. */
+.ecmap__vessel { cursor: pointer; }
+.ecmap__vessel-mark {
+  fill: var(--color-navy-800);
+  opacity: 0.55;
+  stroke: #fff;
+  stroke-width: 0.5;
+}
+.ecmap__vessel:hover .ecmap__vessel-mark,
+.ecmap__vessel:focus-visible .ecmap__vessel-mark {
+  fill: var(--color-accent);
+  opacity: 1;
+  outline: none;
+}

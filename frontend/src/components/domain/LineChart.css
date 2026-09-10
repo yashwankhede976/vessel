@@ -1,0 +1,28 @@
+.linechart {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.linechart__grid {
+  stroke: var(--color-border);
+  stroke-width: 1;
+}
+
+.linechart__ytick,
+.linechart__xtick {
+  fill: var(--color-text-subtle);
+  font-size: 10px;
+  font-family: var(--font-sans);
+}
+
+.linechart__band {
+  opacity: 0.14;
+}
+
+.linechart__empty {
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+  text-align: center;
+  padding: var(--sp-5);
+}
