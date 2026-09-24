@@ -1,7 +1,7 @@
 .ui-field {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-1);
+  gap: var(--sp-2);
   margin-bottom: var(--sp-4);
 }
 
@@ -13,19 +13,43 @@
 
 .ui-field__required {
   color: var(--color-danger);
+  margin-left: 2px;
 }
 
 .ui-field__input,
 .ui-field select,
 .ui-field textarea {
   width: 100%;
-  padding: var(--sp-2) var(--sp-3);
+  padding: 9px var(--sp-3);
   border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   font-size: var(--fs-sm);
   font-family: inherit;
   color: var(--color-text);
   background: var(--color-surface);
+  transition: border-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+}
+
+/* Styled native select with a custom chevron. */
+.ui-field select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: var(--sp-7);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b675f' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--sp-3) center;
+  cursor: pointer;
+}
+
+.ui-field__input::placeholder,
+.ui-field textarea::placeholder {
+  color: var(--color-text-subtle);
+}
+
+.ui-field__input:hover,
+.ui-field select:hover,
+.ui-field textarea:hover {
+  border-color: var(--color-text-subtle);
 }
 
 .ui-field__input:focus,
@@ -33,7 +57,7 @@
 .ui-field textarea:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px var(--color-accent-soft);
+  box-shadow: var(--shadow-focus);
 }
 
 .ui-field__hint {
@@ -46,11 +70,17 @@
   margin: 0;
   font-size: var(--fs-xs);
   color: var(--color-danger);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .ui-field--error .ui-field__input,
 .ui-field--error select,
 .ui-field--error textarea {
   border-color: var(--color-danger);
+}
+
+.ui-field--error .ui-field__input:focus,
+.ui-field--error select:focus,
+.ui-field--error textarea:focus {
+  box-shadow: 0 0 0 3px var(--color-danger-soft);
 }

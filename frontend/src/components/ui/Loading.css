@@ -9,7 +9,7 @@
 .ui-loading--fill {
   display: flex;
   justify-content: center;
-  padding: var(--sp-8) var(--sp-4);
+  padding: var(--sp-9) var(--sp-4);
   width: 100%;
 }
 
@@ -28,8 +28,36 @@
   }
 }
 
+/* Skeleton shimmer — reusable placeholder for loading data regions. */
+.ui-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-surface-sunken);
+  border-radius: var(--radius-sm);
+}
+.ui-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
+  animation: ui-shimmer 1.4s infinite;
+}
+
+@keyframes ui-shimmer {
+  to { transform: translateX(100%); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ui-loading__spinner {
     animation-duration: 2s;
+  }
+  .ui-skeleton::after {
+    animation: none;
   }
 }

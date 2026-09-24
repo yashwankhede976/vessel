@@ -19,12 +19,16 @@
 }
 .score-bar__track {
   height: 8px;
-  background: var(--color-surface-alt);
+  background: var(--color-surface-sunken);
   border: 1px solid var(--color-border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   overflow: hidden;
 }
-.score-bar__fill { height: 100%; border-radius: 999px; }
+.score-bar__fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  transition: width var(--dur-slow) var(--ease);
+}
 .score-bar__fill--accent { background: var(--color-accent); }
 .score-bar__fill--danger { background: var(--color-danger); }
 .score-bar__fill--warning { background: var(--color-warning); }

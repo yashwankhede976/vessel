@@ -1,69 +1,262 @@
 /*
- * Vessel design system — maritime / enterprise visual language.
- * Plain CSS variables (no UI framework dependency). Clean, professional,
- * data-dense. Not derived from any third-party product's branding or assets.
+ * Vessel design system — premium enterprise intelligence visual language.
+ * Plain CSS variables (no UI framework dependency). Minimal, precise,
+ * data-driven. Neutral foundation, restrained warm accent, editorial rhythm.
+ * Not derived from any third-party product's branding or assets.
+ *
+ * All legacy token names are preserved so existing pages/components keep
+ * working; they now resolve to the refreshed palette below.
  */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
 :root {
-  /* Brand / accent — deep maritime navy + teal. */
-  --color-navy-900: #0b1f33;
-  --color-navy-800: #10293f;
-  --color-navy-700: #16374f;
-  --color-navy-600: #1f4a67;
-  --color-accent: #0e7c86;      /* teal */
-  --color-accent-hover: #0b656d;
-  --color-accent-soft: #e2f1f2;
+  /* ------------------------------------------------------------------ */
+  /* Foundation neutrals — warm off-white base, near-black ink.          */
+  /* ------------------------------------------------------------------ */
+  --color-bg: #f7f7f5;              /* app background — warm off-white   */
+  --color-surface: #ffffff;         /* cards / panels                     */
+  --color-surface-alt: #fafaf8;     /* subtle zebra / table head          */
+  --color-surface-sunken: #f2f2ef;  /* wells, inputs, tracks              */
 
-  /* Neutrals. */
-  --color-bg: #f4f6f8;
-  --color-surface: #ffffff;
-  --color-surface-alt: #f8fafc;
-  --color-border: #e2e8f0;
-  --color-border-strong: #cbd5e1;
-  --color-text: #1a2733;
-  --color-text-muted: #5b6b7b;
-  --color-text-subtle: #8494a3;
+  --color-border: #e8e8e4;          /* hairline borders                   */
+  --color-border-strong: #d8d8d2;   /* interactive / stronger borders     */
 
-  /* Status. */
-  --color-success: #1a7f4b;
-  --color-success-soft: #e4f4ea;
-  --color-warning: #b7791f;
-  --color-warning-soft: #fdf3e0;
-  --color-danger: #c0392b;
-  --color-danger-soft: #fbe9e7;
-  --color-info: #1f6feb;
-  --color-info-soft: #e7f0fe;
+  --color-text: #16130f;            /* primary near-black ink             */
+  --color-text-muted: #6b675f;      /* secondary neutral gray             */
+  --color-text-subtle: #9a958b;     /* tertiary / captions                */
+  --color-text-inverse: #f7f7f5;    /* on dark surfaces                   */
 
-  /* Typography. */
+  /* Dark editorial surface (top bar, dark sections, footers). */
+  --color-ink-900: #14120f;
+  --color-ink-800: #1c1a16;
+  --color-ink-700: #262320;
+  --color-ink-600: #34302b;
+  --color-ink-line: #3a352f;        /* borders on dark surfaces           */
+  --color-ink-text: #ededea;
+  --color-ink-text-muted: #a49f95;
+
+  /* Legacy navy aliases → remapped to the new dark ink so older
+     component CSS (topnav/sidebar) inherits the refreshed look. */
+  --color-navy-900: var(--color-ink-900);
+  --color-navy-800: var(--color-ink-800);
+  --color-navy-700: var(--color-ink-700);
+  --color-navy-600: var(--color-ink-600);
+
+  /* ------------------------------------------------------------------ */
+  /* Accent — refined warm amber, used sparingly for emphasis.          */
+  /* ------------------------------------------------------------------ */
+  --color-accent: #d9772b;          /* warm amber                         */
+  --color-accent-hover: #c1651e;
+  --color-accent-strong: #a9541a;
+  --color-accent-soft: #fbeee1;     /* tinted background                  */
+  --color-accent-contrast: #ffffff;
+
+  /* Secondary accent — muted sage, for supporting chart series / tags. */
+  --color-accent-2: #6f8b52;
+  --color-accent-2-soft: #eef2e6;
+
+  /* ------------------------------------------------------------------ */
+  /* Status — desaturated, enterprise-appropriate.                       */
+  /* ------------------------------------------------------------------ */
+  --color-success: #2f7d54;
+  --color-success-soft: #e7f2ec;
+  --color-warning: #b07818;
+  --color-warning-soft: #fbf1de;
+  --color-danger: #c1443a;
+  --color-danger-soft: #fbe9e6;
+  --color-info: #2f6fb0;
+  --color-info-soft: #e8f0f8;
+
+  /* ------------------------------------------------------------------ */
+  /* Typography.                                                         */
+  /* ------------------------------------------------------------------ */
   --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
-  --font-mono: "SFMono-Regular", "Menlo", monospace;
-  --fs-xs: 0.75rem;
-  --fs-sm: 0.85rem;
-  --fs-md: 0.95rem;
-  --fs-lg: 1.15rem;
-  --fs-xl: 1.5rem;
-  --fs-2xl: 2rem;
+  --font-mono: "SFMono-Regular", "Menlo", "Consolas", monospace;
 
-  /* Spacing scale. */
+  /* Type ramp (rem-based). Legacy names kept + new display sizes added. */
+  --fs-xs: 0.75rem;      /* 12px — captions / labels        */
+  --fs-sm: 0.8125rem;    /* 13px — supporting text          */
+  --fs-md: 0.9375rem;    /* 15px — body                     */
+  --fs-lg: 1.125rem;     /* 18px — subheading               */
+  --fs-xl: 1.5rem;       /* 24px — card / section title     */
+  --fs-2xl: 2rem;        /* 32px — page title               */
+  --fs-3xl: 2.75rem;     /* 44px — section heading          */
+  --fs-display: 3.5rem;  /* 56px — hero display             */
+  --fs-metric: 2.5rem;   /* 40px — large metric values      */
+
+  --lh-tight: 1.15;
+  --lh-snug: 1.3;
+  --lh-normal: 1.55;
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.06em;
+
+  /* ------------------------------------------------------------------ */
+  /* Spacing scale (4px base).                                           */
+  /* ------------------------------------------------------------------ */
   --sp-1: 4px;
   --sp-2: 8px;
   --sp-3: 12px;
   --sp-4: 16px;
   --sp-5: 24px;
   --sp-6: 32px;
+  --sp-7: 40px;
   --sp-8: 48px;
+  --sp-9: 64px;
+  --sp-10: 80px;
+  --sp-11: 96px;
+  --sp-12: 120px;
 
-  /* Radii & shadows. */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --shadow-sm: 0 1px 2px rgba(16, 41, 63, 0.06);
-  --shadow-md: 0 4px 12px rgba(16, 41, 63, 0.08);
-  --shadow-lg: 0 12px 32px rgba(16, 41, 63, 0.14);
+  /* ------------------------------------------------------------------ */
+  /* Radii & shadows — restrained elevation.                            */
+  /* ------------------------------------------------------------------ */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-pill: 999px;
 
-  /* Layout. */
-  --topnav-height: 56px;
-  --sidebar-width: 240px;
+  --shadow-xs: 0 1px 2px rgba(20, 18, 15, 0.04);
+  --shadow-sm: 0 1px 3px rgba(20, 18, 15, 0.06), 0 1px 2px rgba(20, 18, 15, 0.04);
+  --shadow-md: 0 6px 20px rgba(20, 18, 15, 0.08);
+  --shadow-lg: 0 18px 48px rgba(20, 18, 15, 0.14);
+  --shadow-focus: 0 0 0 3px rgba(217, 119, 43, 0.22);
+
+  /* ------------------------------------------------------------------ */
+  /* Motion.                                                             */
+  /* ------------------------------------------------------------------ */
+  --ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+  --dur-fast: 140ms;
+  --dur: 200ms;
+  --dur-slow: 320ms;
+
+  /* ------------------------------------------------------------------ */
+  /* Layout.                                                             */
+  /* ------------------------------------------------------------------ */
+  --topnav-height: 60px;
+  --sidebar-width: 248px;
   --sidebar-width-collapsed: 0px;
+  --content-max: 1440px;
+
+  /* Breakpoint reference (documentation): 1440 / 1280 / 1024 / 768 / 390 */
+
+  /* ------------------------------------------------------------------ */
+  /* Navigation chrome (top bar + sidebar) — theme-aware so the shell    */
+  /* stays coherent with the content across themes.                      */
+  /* ------------------------------------------------------------------ */
+  --color-chrome: var(--color-ink-900);          /* bar/sidebar surface  */
+  --color-chrome-hover: var(--color-ink-700);     /* hover cells          */
+  --color-chrome-active: var(--color-ink-700);    /* active cell          */
+  --color-chrome-line: var(--color-ink-line);     /* borders on chrome    */
+  --color-chrome-text: #ffffff;                   /* primary chrome text  */
+  --color-chrome-text-muted: var(--color-ink-text-muted);
+
+  color-scheme: light;
+}
+
+/* =====================================================================
+   DARK THEME — near-black surfaces, light text. The chrome tokens stay
+   dark and the content surfaces become dark too, so the whole app is
+   cohesive (fixes the "dark bar + white content" mismatch).
+   ===================================================================== */
+[data-theme="dark"] {
+  --color-bg: #0d0d0d;
+  --color-surface: #161616;
+  --color-surface-alt: #1c1c1c;
+  --color-surface-sunken: #202020;
+
+  --color-border: #2a2a2a;
+  --color-border-strong: #3a3a3a;
+
+  --color-text: #f4f4f2;
+  --color-text-muted: #a8a49b;
+  --color-text-subtle: #7c786f;
+  --color-text-inverse: #14120f;
+
+  /* Slightly brighter accent for contrast on dark surfaces. */
+  --color-accent: #e88a3c;
+  --color-accent-hover: #f09750;
+  --color-accent-strong: #f0a566;
+  --color-accent-soft: #2a1e12;
+  --color-accent-2: #8faf6a;
+  --color-accent-2-soft: #1c2214;
+
+  --color-success: #4eb97e;
+  --color-success-soft: #14251b;
+  --color-warning: #e0a437;
+  --color-warning-soft: #2a2010;
+  --color-danger: #e26a5f;
+  --color-danger-soft: #2a1512;
+  --color-info: #5a9bd8;
+  --color-info-soft: #12202e;
+
+  /* Chrome matches the content in dark mode (one continuous dark UI). */
+  --color-chrome: #111111;
+  --color-chrome-hover: #202020;
+  --color-chrome-active: #202020;
+  --color-chrome-line: #2a2a2a;
+  --color-chrome-text: #f4f4f2;
+  --color-chrome-text-muted: #a8a49b;
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.6);
+  --shadow-focus: 0 0 0 3px rgba(232, 138, 60, 0.35);
+
+  color-scheme: dark;
+}
+
+/* =====================================================================
+   HIGH-CONTRAST — near-pure black & white, minimal chroma. For maximum
+   legibility / accessibility and a stark editorial look.
+   ===================================================================== */
+[data-theme="contrast"] {
+  --color-bg: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f2f2f2;
+  --color-surface-sunken: #ebebeb;
+
+  --color-border: #000000;
+  --color-border-strong: #000000;
+
+  --color-text: #000000;
+  --color-text-muted: #1f1f1f;
+  --color-text-subtle: #3d3d3d;
+  --color-text-inverse: #ffffff;
+
+  --color-accent: #000000;
+  --color-accent-hover: #1f1f1f;
+  --color-accent-strong: #000000;
+  --color-accent-soft: #e6e6e6;
+  --color-accent-2: #000000;
+  --color-accent-2-soft: #e6e6e6;
+
+  --color-success: #0a5c2e;
+  --color-success-soft: #e2f0e8;
+  --color-warning: #7a4d00;
+  --color-warning-soft: #f3ead6;
+  --color-danger: #a1160a;
+  --color-danger-soft: #f6e2df;
+  --color-info: #0b3c73;
+  --color-info-soft: #e2ebf5;
+
+  --color-chrome: #000000;
+  --color-chrome-hover: #1f1f1f;
+  --color-chrome-active: #1f1f1f;
+  --color-chrome-line: #444444;
+  --color-chrome-text: #ffffff;
+  --color-chrome-text-muted: #cccccc;
+
+  --shadow-xs: 0 0 0 1px #000000;
+  --shadow-sm: 0 0 0 1px #000000;
+  --shadow-md: 0 0 0 2px #000000;
+  --shadow-lg: 0 0 0 2px #000000;
+  --shadow-focus: 0 0 0 3px #000000;
+
+  color-scheme: light;
 }
 
 * {
@@ -83,22 +276,29 @@ body {
   color: var(--color-text);
   background: var(--color-bg);
   -webkit-font-smoothing: antialiased;
-  line-height: 1.5;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: var(--lh-normal);
+  font-feature-settings: "cv05", "ss01";
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
 a {
   color: var(--color-accent);
   text-decoration: none;
+  transition: color var(--dur-fast) var(--ease);
 }
 
 a:hover {
-  text-decoration: underline;
+  color: var(--color-accent-hover);
+  text-decoration: none;
 }
 
 h1, h2, h3, h4 {
   margin: 0 0 var(--sp-3);
-  color: var(--color-navy-800);
-  font-weight: 600;
+  color: var(--color-text);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--lh-snug);
 }
 
 h1 { font-size: var(--fs-2xl); }
@@ -108,9 +308,28 @@ h3 { font-size: var(--fs-lg); }
 p { margin: 0 0 var(--sp-3); }
 
 :focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: var(--shadow-focus);
+  border-radius: var(--radius-sm);
 }
+
+::selection {
+  background: var(--color-accent-soft);
+  color: var(--color-accent-strong);
+}
+
+/* Refined scrollbars for a more polished feel on desktop. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
+}
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--color-bg);
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--color-text-subtle); }
 
 .visually-hidden {
   position: absolute;
@@ -123,3 +342,25 @@ p { margin: 0 0 var(--sp-3); }
   white-space: nowrap;
   border: 0;
 }
+
+/* Small utility: an eyebrow / kicker label used across sections. */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-accent-strong);
+}
+
+/* Sub-table header rows used on some pages (grid-based mini tables). */
+.subtable-head {
+  font-size: 0.6875rem !important;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted) !important;
+  font-weight: 700;
+}
+

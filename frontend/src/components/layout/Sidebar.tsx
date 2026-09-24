@@ -5,6 +5,7 @@ import "./Sidebar.css";
 
 interface SidebarProps {
   open: boolean;
+  collapsed?: boolean;
   onNavigate: () => void;
 }
 
@@ -15,10 +16,18 @@ const SECTION_ORDER: NavItem["section"][] = [
   "system",
 ];
 
-/** Left navigation. Collapses off-canvas on small screens. */
-export default function Sidebar({ open, onNavigate }: SidebarProps) {
+/** Left navigation. Collapses off-canvas on small screens; can be collapsed on
+ *  desktop via the top-bar toggle for a full-width content view. */
+export default function Sidebar({ open, collapsed = false, onNavigate }: SidebarProps) {
+  const className = [
+    "sidebar",
+    open ? "sidebar--open" : "",
+    collapsed ? "sidebar--collapsed" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
   return (
-    <aside className={open ? "sidebar sidebar--open" : "sidebar"} aria-label="Primary">
+    <aside className={className} aria-label="Primary" aria-hidden={collapsed || undefined}>
       <nav className="sidebar__nav">
         {SECTION_ORDER.map((section) => {
           const items = NAV_ITEMS.filter((i) => i.section === section);

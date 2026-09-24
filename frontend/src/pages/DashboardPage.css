@@ -1,26 +1,80 @@
-.dashboard-decision { margin-bottom: var(--sp-4); }
+/* Dashboard — executive intelligence layout. */
+
+/* Hero row: headline decision + at-a-glance signal panel. */
+.dashboard-hero {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-5);
+  align-items: stretch;
+}
+.dashboard-hero__decision { display: flex; }
+.dashboard-hero__decision > * { flex: 1; }
+
+.dashboard-glance {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+}
+.dashboard-glance__title {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+.dashboard-glance__list { display: flex; flex-direction: column; gap: var(--sp-1); }
+.dashboard-glance__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.dashboard-glance__row:last-child { border-bottom: none; }
+.dashboard-glance__label { font-size: var(--fs-sm); color: var(--color-text-muted); }
+.dashboard-glance__value {
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
 
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: var(--sp-4);
-  margin-bottom: var(--sp-4);
+  margin-bottom: var(--sp-5);
 }
-.kpi__label { margin: 0; font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted); }
-.kpi__value { margin: var(--sp-2) 0 0; font-size: var(--fs-xl); font-weight: 700; }
+.kpi__label { margin: 0; font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: var(--tracking-wide); color: var(--color-text-muted); font-weight: 600; }
+.kpi__value { margin: var(--sp-2) 0 0; font-size: var(--fs-metric); font-weight: 800; letter-spacing: var(--tracking-tight); font-variant-numeric: tabular-nums; }
 .kpi__note { margin: var(--sp-1) 0 0; font-size: var(--fs-sm); color: var(--color-text-subtle); }
 
 .dashboard-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: var(--sp-4);
-  margin-bottom: var(--sp-4);
+  margin-bottom: var(--sp-5);
+  align-items: start;
 }
 .dash-chart-title { display: inline-flex; align-items: center; gap: var(--sp-2); }
-.dashboard-empty { color: var(--color-text-muted); font-size: var(--fs-sm); text-align: center; padding: var(--sp-4); }
+.dashboard-empty { color: var(--color-text-muted); font-size: var(--fs-sm); text-align: center; padding: var(--sp-6) var(--sp-4); }
 
-.dashboard-alerts { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-3); }
-.dashboard-alerts li { display: flex; align-items: flex-start; gap: var(--sp-2); font-size: var(--fs-sm); }
+.dashboard-alerts { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-1); }
+.dashboard-alerts li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  font-size: var(--fs-sm);
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--color-border);
+  line-height: var(--lh-snug);
+}
+.dashboard-alerts li:last-child { border-bottom: none; }
 .dashboard-alerts__sev { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex: none; }
 .dashboard-alerts__sev--critical, .dashboard-alerts__sev--high { background: var(--color-danger); }
 .dashboard-alerts__sev--medium { background: var(--color-warning); }
@@ -29,13 +83,14 @@
 .signal-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-3); }
 .signal-list li { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-sm); }
 
-@media (max-width: 900px) {
-  .dashboard-grid { grid-template-columns: 1fr; }
-}
-
-.dashboard-map { display: grid; gap: var(--sp-2); }
+.dashboard-map { display: grid; gap: var(--sp-3); }
 .dashboard-map__hint { margin: 0; font-size: var(--fs-sm); color: var(--color-text-muted); text-align: center; }
 .dashboard-vessel { margin: 0; display: grid; gap: var(--sp-2); }
 .dashboard-vessel > div { display: flex; justify-content: space-between; gap: var(--sp-4); font-size: var(--fs-sm); border-bottom: 1px solid var(--color-border); padding-bottom: var(--sp-2); }
 .dashboard-vessel dt { color: var(--color-text-muted); margin: 0; }
 .dashboard-vessel dd { margin: 0; font-weight: 600; }
+
+@media (max-width: 1024px) {
+  .dashboard-hero { grid-template-columns: 1fr; }
+  .dashboard-grid { grid-template-columns: 1fr; }
+}

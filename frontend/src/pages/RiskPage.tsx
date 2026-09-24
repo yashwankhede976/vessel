@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PageHeader from "../components/layout/PageHeader";
-import { Badge, Card, ErrorState, FormField, Loading } from "../components/ui";
+import { Badge, Card, EmptyState, ErrorState, FormField, Loading } from "../components/ui";
 import type { BadgeVariant } from "../components/ui";
 import { ScoreBar, StatTile } from "../components/domain";
 import { api, ApiError } from "../api";
@@ -112,7 +112,13 @@ export default function RiskPage() {
           ) : error ? (
             <Card><ErrorState onRetry={compute} message={error.displayMessage} /></Card>
           ) : !result ? (
-            <Card title="Overall risk"><p className="risk-empty">Provide signals and score to see the overall risk and breakdown.</p></Card>
+            <Card>
+              <EmptyState
+                icon="🛡"
+                title="No score yet"
+                message="Provide your risk signals on the left and score to see the overall risk and its factor breakdown."
+              />
+            </Card>
           ) : (
             <>
               <StatTile

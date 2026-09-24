@@ -2,10 +2,15 @@
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-xs);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  transition: box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+
+.ui-card:hover {
+  box-shadow: var(--shadow-sm);
 }
 
 .ui-card__header {
@@ -13,15 +18,16 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--sp-3);
-  padding: var(--sp-4) var(--sp-5);
+  padding: var(--sp-5) var(--sp-5) var(--sp-4);
   border-bottom: 1px solid var(--color-border);
 }
 
 .ui-card__title {
   margin: 0;
   font-size: var(--fs-md);
-  font-weight: 600;
-  color: var(--color-navy-800);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-text);
 }
 
 .ui-card__subtitle {

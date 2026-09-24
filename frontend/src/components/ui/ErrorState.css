@@ -1,19 +1,19 @@
 .ui-error {
   display: flex;
   align-items: center;
-  gap: var(--sp-3);
-  padding: var(--sp-4) var(--sp-5);
+  gap: var(--sp-4);
+  padding: var(--sp-5);
   background: var(--color-danger-soft);
-  border: 1px solid rgba(192, 57, 43, 0.25);
-  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--color-danger) 22%, transparent);
+  border-radius: var(--radius-lg);
   color: var(--color-text);
 }
 
 .ui-error__icon {
   flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-pill);
   background: var(--color-danger);
   color: #fff;
   font-weight: 700;
@@ -28,7 +28,8 @@
 
 .ui-error__title {
   margin: 0;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: var(--fs-md);
   color: var(--color-danger);
 }
 
@@ -42,12 +43,14 @@
   flex-shrink: 0;
   background: var(--color-surface);
   border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-sm);
-  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--radius-md);
+  padding: 9px var(--sp-4);
   font-size: var(--fs-sm);
   font-weight: 600;
   cursor: pointer;
   color: var(--color-text);
+  font-family: inherit;
+  transition: border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
 }
 
 .ui-error__retry:hover {

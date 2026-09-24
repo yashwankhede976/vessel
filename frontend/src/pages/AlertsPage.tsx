@@ -93,12 +93,12 @@ export default function AlertsPage() {
       render: (a) => (
         <div className="alerts__actions">
           {a.status !== "acknowledged" && a.status !== "resolved" && (
-            <button className="btn" disabled={busyId === a.id} onClick={() => act(a.id, "acknowledge")}>
+            <button className="btn btn--sm" disabled={busyId === a.id} onClick={() => act(a.id, "acknowledge")}>
               Ack
             </button>
           )}
           {a.status !== "resolved" && (
-            <button className="btn" disabled={busyId === a.id} onClick={() => act(a.id, "resolve")}>
+            <button className="btn btn--sm" disabled={busyId === a.id} onClick={() => act(a.id, "resolve")}>
               Resolve
             </button>
           )}

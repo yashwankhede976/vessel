@@ -2,8 +2,13 @@
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-xs);
   overflow: hidden;
+  transition: box-shadow var(--dur) var(--ease);
+}
+
+.ui-chart:hover {
+  box-shadow: var(--shadow-sm);
 }
 
 .ui-chart__header {
@@ -18,8 +23,9 @@
 .ui-chart__title {
   margin: 0;
   font-size: var(--fs-md);
-  font-weight: 600;
-  color: var(--color-navy-800);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-text);
 }
 
 .ui-chart__actions {
@@ -28,12 +34,13 @@
 }
 
 .ui-chart__body {
-  padding: var(--sp-4);
+  padding: var(--sp-5);
   display: flex;
 }
 
 .ui-chart__placeholder {
   flex: 1;
+  min-height: 160px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -41,11 +48,5 @@
   border-radius: var(--radius-md);
   color: var(--color-text-subtle);
   font-size: var(--fs-sm);
-  background: repeating-linear-gradient(
-    45deg,
-    var(--color-surface-alt),
-    var(--color-surface-alt) 10px,
-    var(--color-surface) 10px,
-    var(--color-surface) 20px
-  );
+  background: var(--color-surface-alt);
 }

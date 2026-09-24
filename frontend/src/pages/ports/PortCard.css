@@ -11,16 +11,18 @@
 }
 
 .port-card .ui-card {
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
 
 .port-card:hover .ui-card {
-  border-color: var(--color-accent);
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
 }
 
 .port-card--selected .ui-card {
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 1px var(--color-accent);
+  box-shadow: inset 0 0 0 1px var(--color-accent);
 }
 
 .port-card__head {
@@ -32,8 +34,9 @@
 
 .port-card__name {
   margin: 0;
-  font-weight: 600;
-  color: var(--color-navy-800);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-text);
 }
 
 .port-card__sub {

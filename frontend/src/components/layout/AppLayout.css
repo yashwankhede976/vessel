@@ -3,6 +3,7 @@
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
+  background: var(--color-bg);
 }
 
 .app-layout__body {
@@ -14,22 +15,61 @@
 .app-layout__content {
   flex: 1;
   overflow-y: auto;
-  padding: var(--sp-5) var(--sp-6);
+  padding: var(--sp-7) var(--sp-8) var(--sp-10);
+  scroll-behavior: smooth;
+}
+
+/* Center the content column and cap its width for editorial rhythm. */
+.app-layout__content > * {
+  max-width: var(--content-max);
+  margin-inline: auto;
+}
+
+/* Consistent vertical rhythm between stacked top-level blocks on every page
+   (cards, chart containers, tables) so pages never feel like floating chunks.
+   Elements that manage their own margin (page header, section header) are
+   excluded. */
+.app-layout__content > * + *:not(.page-header):not(.section-header) {
+  margin-top: var(--sp-4);
 }
 
 .app-layout__backdrop {
   display: none;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .app-layout__content {
-    padding: var(--sp-4);
+    padding: var(--sp-6) var(--sp-6) var(--sp-9);
+  }
+}
+
+@media (max-width: 768px) {
+  .app-layout__content {
+    padding: var(--sp-5) var(--sp-5) var(--sp-8);
   }
   .app-layout__backdrop {
     display: block;
     position: fixed;
     inset: var(--topnav-height) 0 0 0;
-    background: rgba(11, 31, 51, 0.4);
+    background: rgba(20, 18, 15, 0.5);
+    backdrop-filter: blur(2px);
     z-index: 30;
+    animation: layout-fade var(--dur) var(--ease);
   }
+}
+
+@media (max-width: 480px) {
+  .app-layout__content {
+    padding: var(--sp-4) var(--sp-4) var(--sp-8);
+  }
+}
+
+@keyframes layout-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-layout__backdrop { animation: none; }
+  .app-layout__content { scroll-behavior: auto; }
 }

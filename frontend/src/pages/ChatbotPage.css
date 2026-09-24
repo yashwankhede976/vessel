@@ -86,7 +86,14 @@
   color: var(--color-text);
   cursor: pointer;
 }
-.chatbot__chip:hover:not(:disabled) { border-color: var(--color-accent); }
+.chatbot__chip {
+  transition: border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
+}
+.chatbot__chip:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  color: var(--color-accent-strong);
+  background: var(--color-accent-soft);
+}
 .chatbot__chip:disabled { opacity: 0.5; cursor: default; }
 
 .chatbot__composer {
@@ -103,4 +110,7 @@
   background: var(--color-surface);
   color: var(--color-text);
 }
-.chatbot__input:focus { outline: none; border-color: var(--color-accent); }
+.chatbot__input {
+  transition: border-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+}
+.chatbot__input:focus { outline: none; border-color: var(--color-accent); box-shadow: var(--shadow-focus); }

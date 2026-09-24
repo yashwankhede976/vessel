@@ -33,7 +33,7 @@ interface LineChartProps {
 }
 
 const PAD = { top: 12, right: 16, bottom: 28, left: 44 };
-const DEFAULT_COLORS = ["#0e7c86", "#1f6feb", "#b7791f", "#c0392b"];
+const DEFAULT_COLORS = ["#d9772b", "#6f8b52", "#2f6fb0", "#c1443a"];
 
 export default function LineChart({
   series,
@@ -121,7 +121,7 @@ export default function LineChart({
         <path
           d={bandPath}
           className="linechart__band"
-          fill={band?.color ?? "#0e7c86"}
+          fill={band?.color ?? "#d9772b"}
           clipPath={`url(#${clipId})`}
         />
       )}

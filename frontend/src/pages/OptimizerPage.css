@@ -9,10 +9,14 @@
   min-width: 720px;
 }
 .opt-candidates__head {
-  font-size: var(--fs-xs);
+  font-size: 0.6875rem;
   text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  font-weight: 700;
   color: var(--color-text-muted);
-  margin-bottom: var(--sp-2);
+  margin-bottom: var(--sp-3);
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--color-border);
 }
 .opt-candidates__row { margin-bottom: var(--sp-2); }
 .opt-results { display: grid; gap: var(--sp-4); }

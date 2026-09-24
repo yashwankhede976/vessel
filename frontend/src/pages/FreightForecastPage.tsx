@@ -61,12 +61,12 @@ export default function FreightForecastPage() {
 
     const histSeries: ChartSeries = {
       name: "Historical",
-      color: "#16374f",
+      color: "#34302b",
       points: data.historical.map((h) => ({ x: dayIndex(h.date, base), y: Number(h.rate_per_tonne) })),
     };
     const fcSeries: ChartSeries = {
       name: "Forecast",
-      color: "#0e7c86",
+      color: "#d9772b",
       dashed: true,
       points: data.forecast.map((f) => ({
         x: dayIndex(f.target_date, base),

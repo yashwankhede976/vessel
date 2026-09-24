@@ -8,17 +8,21 @@
   margin: 0;
   font-size: var(--fs-xs);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: var(--tracking-wide);
   color: var(--color-text-muted);
+  font-weight: 600;
 }
 .stat-tile__value {
-  margin: var(--sp-2) 0 0;
-  font-size: var(--fs-xl);
-  font-weight: 700;
+  margin: var(--sp-3) 0 0;
+  font-size: var(--fs-metric);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: var(--tracking-tight);
   color: var(--color-text);
+  font-variant-numeric: tabular-nums;
 }
 .stat-tile__note {
-  margin: var(--sp-1) 0 0;
+  margin: var(--sp-2) 0 0;
   font-size: var(--fs-sm);
   color: var(--color-text-subtle);
 }

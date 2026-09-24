@@ -7,6 +7,6 @@
 .risk-form { display: grid; gap: var(--sp-3); }
 .risk-result { display: grid; gap: var(--sp-4); }
 .risk-empty { color: var(--color-text-muted); font-size: var(--fs-sm); }
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .risk-layout { grid-template-columns: 1fr; }
 }

@@ -1,16 +1,19 @@
 .ui-modal__backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(11, 31, 51, 0.5);
+  background: rgba(20, 18, 15, 0.55);
+  backdrop-filter: blur(3px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--sp-4);
   z-index: 1000;
+  animation: ui-modal-fade var(--dur) var(--ease);
 }
 
 .ui-modal {
   background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   width: 100%;
@@ -18,11 +21,12 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  animation: ui-modal-rise var(--dur-slow) var(--ease);
 }
 
-.ui-modal--sm { max-width: 400px; }
-.ui-modal--md { max-width: 560px; }
-.ui-modal--lg { max-width: 820px; }
+.ui-modal--sm { max-width: 420px; }
+.ui-modal--md { max-width: 580px; }
+.ui-modal--lg { max-width: 860px; }
 
 .ui-modal__header {
   display: flex;
@@ -35,20 +39,25 @@
 .ui-modal__title {
   margin: 0;
   font-size: var(--fs-lg);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
 }
 
 .ui-modal__close {
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   line-height: 1;
   cursor: pointer;
   color: var(--color-text-muted);
-  padding: 0 var(--sp-1);
+  padding: var(--sp-1);
+  border-radius: var(--radius-sm);
+  transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
 }
 
 .ui-modal__close:hover {
   color: var(--color-text);
+  background: var(--color-surface-sunken);
 }
 
 .ui-modal__body {
@@ -60,7 +69,21 @@
   display: flex;
   justify-content: flex-end;
   gap: var(--sp-2);
-  padding: var(--sp-3) var(--sp-5);
+  padding: var(--sp-4) var(--sp-5);
   border-top: 1px solid var(--color-border);
   background: var(--color-surface-alt);
+}
+
+@keyframes ui-modal-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes ui-modal-rise {
+  from { opacity: 0; transform: translateY(8px) scale(0.99); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-modal__backdrop,
+  .ui-modal { animation: none; }
 }

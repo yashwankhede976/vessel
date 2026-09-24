@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PageHeader from "../components/layout/PageHeader";
-import { Card, ErrorState, FormField, Loading } from "../components/ui";
+import { Card, EmptyState, ErrorState, FormField, Loading } from "../components/ui";
 import { DataFreshnessStrip, DataLabel, ScoreBar, StatTile } from "../components/domain";
 import { api, ApiError } from "../api";
 import type { MarketPressureResult } from "../api";
@@ -119,11 +119,12 @@ export default function MarketIntelligencePage() {
           ) : error ? (
             <Card><ErrorState onRetry={compute} message={error.displayMessage} /></Card>
           ) : !result ? (
-            <Card title="Freight Market Pressure Index">
-              <p className="market-empty">
-                Set your market signals and compute the index to see the current
-                pressure read and its drivers.
-              </p>
+            <Card>
+              <EmptyState
+                icon="≈"
+                title="No index yet"
+                message="Set your market signals and compute the index to see the current pressure read and its drivers."
+              />
             </Card>
           ) : (
             <>

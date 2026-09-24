@@ -29,7 +29,7 @@
   overflow-y: auto;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1024px) {
   .ports-layout {
     grid-template-columns: 1fr;
   }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "../components/layout/PageHeader";
-import { Card, ChartContainer } from "../components/ui";
+import { Card, ChartContainer, SectionHeader, EmptyState } from "../components/ui";
 import {
   DataFreshnessStrip,
   DataLabel,
@@ -110,7 +110,7 @@ export default function DashboardPage() {
     const base = new Date(pts[0].target_date).getTime();
     const di = (iso: string) => Math.round((new Date(iso).getTime() - base) / 86_400_000);
     series = [{
-      name: "Forecast", color: "#0e7c86", dashed: true,
+      name: "Forecast", color: "#d9772b", dashed: true,
       points: pts.map((p) => ({ x: di(p.target_date), y: Number(p.predicted_rate_per_tonne) })),
     }];
     if (pts.some((p) => p.lower_bound && p.upper_bound)) {
@@ -148,22 +148,55 @@ export default function DashboardPage() {
 
       <DataFreshnessStrip />
 
-      {/* WHAT SHOULD I DO — the headline decision. Prefer the composed decision
-          (full workflow); fall back to the standalone fix/wait engine. */}
-      <div className="dashboard-decision">
-        <DecisionCard
-          decision={d ? humanize(d.timing_decision).toUpperCase() : (s.fixWait ? humanize(s.fixWait.decision).toUpperCase() : (s.loading ? "…" : "MONITOR"))}
-          headline={`${LANE.origin} → ${LANE.destination}`}
-          subline={d?.recommended_contract ? humanize(d.recommended_contract.recommended_strategy) : (s.strategy ? humanize(s.strategy.recommended_strategy) : undefined)}
-          expectedSaving={expectedSavings ? formatCurrency(expectedSavings.amount, expectedSavings.currency) : (s.strategy ? formatCurrency(s.strategy.expected_savings, s.strategy.currency) : undefined)}
-          risk={d?.risk ? (d.risk.risk_level.toUpperCase()) : (s.strategy ? (s.strategy.risk_score >= 66 ? "HIGH" : s.strategy.risk_score >= 33 ? "MEDIUM" : "LOW") : undefined)}
-          confidence={d?.confidence ?? s.fixWait?.effective_confidence ?? null}
-          reason={d?.timing?.reason ?? s.fixWait?.reason}
-          factors={factors}
-        />
+      {/* WHAT SHOULD I DO — the headline decision + at-a-glance signals. */}
+      <div className="dashboard-hero">
+        <div className="dashboard-hero__decision">
+          <DecisionCard
+            decision={d ? humanize(d.timing_decision).toUpperCase() : (s.fixWait ? humanize(s.fixWait.decision).toUpperCase() : (s.loading ? "…" : "MONITOR"))}
+            headline={`${LANE.origin} → ${LANE.destination}`}
+            subline={d?.recommended_contract ? humanize(d.recommended_contract.recommended_strategy) : (s.strategy ? humanize(s.strategy.recommended_strategy) : undefined)}
+            expectedSaving={expectedSavings ? formatCurrency(expectedSavings.amount, expectedSavings.currency) : (s.strategy ? formatCurrency(s.strategy.expected_savings, s.strategy.currency) : undefined)}
+            risk={d?.risk ? (d.risk.risk_level.toUpperCase()) : (s.strategy ? (s.strategy.risk_score >= 66 ? "HIGH" : s.strategy.risk_score >= 33 ? "MEDIUM" : "LOW") : undefined)}
+            confidence={d?.confidence ?? s.fixWait?.effective_confidence ?? null}
+            reason={d?.timing?.reason ?? s.fixWait?.reason}
+            factors={factors}
+          />
+        </div>
+        <Card>
+          <div className="dashboard-glance">
+            <p className="dashboard-glance__title">At a glance</p>
+            <div className="dashboard-glance__list">
+              <div className="dashboard-glance__row">
+                <span className="dashboard-glance__label">Current freight</span>
+                <span className="dashboard-glance__value">{currentRate ? formatCurrency(currentRate) : "—"}</span>
+              </div>
+              <div className="dashboard-glance__row">
+                <span className="dashboard-glance__label">Market pressure</span>
+                <span className="dashboard-glance__value">{s.pressure ? `${s.pressure.index.toFixed(0)}/100` : "—"}</span>
+              </div>
+              <div className="dashboard-glance__row">
+                <span className="dashboard-glance__label">Port risk</span>
+                <span className="dashboard-glance__value">{portRisk ? `${portRisk.overall_score.toFixed(0)}/100` : "—"}</span>
+              </div>
+              <div className="dashboard-glance__row">
+                <span className="dashboard-glance__label">Recommended strategy</span>
+                <span className="dashboard-glance__value">{s.strategy ? humanize(s.strategy.recommended_strategy) : "—"}</span>
+              </div>
+              <div className="dashboard-glance__row">
+                <span className="dashboard-glance__label">Active alerts</span>
+                <span className="dashboard-glance__value">{alertCount}</span>
+              </div>
+            </div>
+          </div>
+        </Card>
       </div>
 
       {/* WHAT IS HAPPENING — KPIs */}
+      <SectionHeader
+        eyebrow="01 — Market state"
+        title="Key indicators"
+        description="Live freight, pressure and risk signals for the selected lane."
+      />
       <div className="kpi-grid">
         <StatTile label="Current freight" value={currentRate ? formatCurrency(currentRate) : "—"} note={`${LANE.origin} → ${LANE.destination}`} badge={<DataLabel kind={currentRate ? "REAL" : "UNKNOWN"} />} />
         <StatTile label="Market pressure" value={s.pressure ? s.pressure.index.toFixed(0) : "—"} note={s.pressure ? humanize(s.pressure.classification) : "no data"} badge={<DataLabel kind="ESTIMATED" />} />
@@ -190,6 +223,12 @@ export default function DashboardPage() {
       </div>
 
       {/* WHAT WILL HAPPEN — forecast */}
+      <SectionHeader
+        eyebrow="02 — Outlook"
+        title="Freight forecast & alerts"
+        description="Model-projected rates with confidence bands, and the latest unresolved conditions."
+        actions={<Link className="btn btn--sm" to="/forecasts">Open forecast <span className="btn__arrow" aria-hidden="true">→</span></Link>}
+      />
       <div className="dashboard-grid">
         <ChartContainer
           title={<span className="dash-chart-title">Freight rate forecast <DataLabel kind="FORECAST" /></span>}
@@ -199,7 +238,12 @@ export default function DashboardPage() {
           {series.length > 0 ? (
             <LineChart series={series} band={band} xLabels={xLabels} height={300} yLabel="rate/t" />
           ) : (
-            <p className="dashboard-empty">No forecast available yet for this lane. <Link to="/forecasts">Open Freight Forecast →</Link></p>
+            <EmptyState
+              icon="📈"
+              title="No forecast yet"
+              message="There isn't a stored freight forecast for this lane yet. Open the forecast workspace to generate one."
+              action={<Link className="btn btn--sm" to="/forecasts">Open Freight Forecast <span className="btn__arrow" aria-hidden="true">→</span></Link>}
+            />
           )}
         </ChartContainer>
 
@@ -214,12 +258,24 @@ export default function DashboardPage() {
               ))}
             </ul>
           ) : (
-            <p className="dashboard-empty">No new alerts. <Link to="/alerts">Open Alert Center →</Link></p>
+            <EmptyState
+              compact
+              icon="✓"
+              title="All clear"
+              message="No new alerts right now."
+              action={<Link className="btn btn--sm" to="/alerts">Open Alert Center <span className="btn__arrow" aria-hidden="true">→</span></Link>}
+            />
           )}
         </Card>
       </div>
 
       {/* East Coast India fleet map — ports + live vessel positions */}
+      <SectionHeader
+        eyebrow="03 — Fleet"
+        title="Live positions"
+        description="East Coast India ports and the latest known vessel positions."
+        actions={<Link className="btn btn--sm" to="/ports">Open ports <span className="btn__arrow" aria-hidden="true">→</span></Link>}
+      />
       <Card
         title="East Coast India — fleet map"
         subtitle="Ports and latest vessel positions"

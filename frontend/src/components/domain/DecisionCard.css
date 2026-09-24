@@ -1,42 +1,64 @@
 .decision-card {
-  background: linear-gradient(135deg, var(--color-navy-900), var(--color-navy-700));
+  position: relative;
+  background:
+    radial-gradient(120% 140% at 100% 0%, rgba(217, 119, 43, 0.16), transparent 55%),
+    linear-gradient(135deg, var(--color-ink-900), var(--color-ink-700));
   color: #fff;
-  border-radius: var(--radius-lg);
-  padding: var(--sp-5);
+  border: 1px solid var(--color-ink-line);
+  border-radius: var(--radius-xl);
+  padding: var(--sp-6);
   box-shadow: var(--shadow-md);
   display: flex;
   flex-direction: column;
   gap: var(--sp-4);
+  overflow: hidden;
 }
 
 .decision-card__eyebrow {
   margin: 0;
   font-size: var(--fs-xs);
-  letter-spacing: 0.08em;
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-accent);
 }
 
 .decision-card__verb {
-  margin: var(--sp-1) 0 0;
-  font-size: 2.25rem;
-  font-weight: 700;
-  line-height: 1.1;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin: var(--sp-2) 0 0;
+  font-size: var(--fs-3xl);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: var(--tracking-tight);
+  color: #fff;
 }
-.decision-card__verb--success { color: #7ee0a5; }
-.decision-card__verb--warning { color: #f4c66b; }
-.decision-card__verb--info { color: #8fbaf6; }
-.decision-card__verb--danger { color: #f0a29a; }
-.decision-card__verb--neutral { color: #cbd5e1; }
+.decision-card__verb::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-pill);
+  background: var(--dot, #cbd5e1);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--dot, #cbd5e1) 28%, transparent);
+  flex-shrink: 0;
+}
+.decision-card__verb--success { --dot: #4ade80; }
+.decision-card__verb--warning { --dot: #fbbf24; }
+.decision-card__verb--info { --dot: var(--color-accent); }
+.decision-card__verb--danger { --dot: #f87171; }
+.decision-card__verb--neutral { --dot: #cbd5e1; }
 
 .decision-card__headline {
-  margin: var(--sp-2) 0 0;
-  font-size: var(--fs-lg);
-  font-weight: 600;
+  margin: var(--sp-3) 0 0;
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+  color: #fff;
 }
 .decision-card__subline {
   margin: var(--sp-1) 0 0;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--color-ink-text-muted);
   font-size: var(--fs-sm);
 }
 
@@ -44,23 +66,34 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--sp-3);
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  padding-top: var(--sp-4);
 }
 .decision-card__metric {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-1);
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-ink-line);
+  border-radius: var(--radius-md);
 }
 .decision-card__metric-label {
-  font-size: var(--fs-xs);
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.6875rem;
+  color: var(--color-ink-text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: var(--tracking-wide);
+  font-weight: 700;
 }
 .decision-card__metric-value {
-  font-size: var(--fs-lg);
-  font-weight: 700;
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: var(--tracking-tight);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 560px) {
+  .decision-card__metrics { grid-template-columns: 1fr; }
+  .decision-card__verb { font-size: var(--fs-2xl); }
 }
 
 .decision-card__why-toggle {

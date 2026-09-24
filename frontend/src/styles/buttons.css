@@ -1,29 +1,126 @@
-/* Shared button styles (used across pages and the layout). */
+/*
+ * Shared button system. Three tiers: primary (dark ink fill), secondary
+ * (neutral outline), tertiary (text + arrow). Subtle motion, accessible focus.
+ * `.btn--primary` keeps its accent fill for existing call sites (CTAs).
+ */
 .btn {
+  --btn-pad-y: 9px;
+  --btn-pad-x: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
   background: var(--color-surface);
   border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-sm);
-  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--radius-md);
+  padding: var(--btn-pad-y) var(--btn-pad-x);
+  font-family: inherit;
   font-size: var(--fs-sm);
   font-weight: 600;
-  cursor: pointer;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
   color: var(--color-text);
-  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
 }
 
 .btn:hover {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
+  border-color: var(--color-text-subtle);
+  background: var(--color-surface-alt);
+  color: var(--color-text);
 }
 
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Primary — accent-filled CTA. */
 .btn--primary {
   background: var(--color-accent);
   border-color: var(--color-accent);
-  color: #fff;
+  color: var(--color-accent-contrast);
+  box-shadow: var(--shadow-xs);
 }
-
 .btn--primary:hover {
   background: var(--color-accent-hover);
   border-color: var(--color-accent-hover);
-  color: #fff;
+  color: var(--color-accent-contrast);
+}
+
+/* Dark — near-black ink fill (alternative solid CTA). */
+.btn--dark {
+  background: var(--color-ink-900);
+  border-color: var(--color-ink-900);
+  color: var(--color-text-inverse);
+}
+.btn--dark:hover {
+  background: var(--color-ink-700);
+  border-color: var(--color-ink-700);
+  color: var(--color-text-inverse);
+}
+
+/* Secondary — neutral outline (default look), listed for explicitness. */
+.btn--secondary {
+  background: var(--color-surface);
+  border-color: var(--color-border-strong);
+  color: var(--color-text);
+}
+
+/* Tertiary — text + arrow, no chrome. */
+.btn--ghost,
+.btn--tertiary {
+  background: transparent;
+  border-color: transparent;
+  color: var(--color-text);
+  padding-left: var(--sp-2);
+  padding-right: var(--sp-2);
+}
+.btn--ghost:hover,
+.btn--tertiary:hover {
+  background: var(--color-surface-sunken);
+  border-color: transparent;
+  color: var(--color-accent-strong);
+}
+
+/* Sizes. */
+.btn--sm {
+  --btn-pad-y: 6px;
+  --btn-pad-x: 12px;
+  font-size: var(--fs-xs);
+  border-radius: var(--radius-sm);
+}
+.btn--lg {
+  --btn-pad-y: 12px;
+  --btn-pad-x: 22px;
+  font-size: var(--fs-md);
+}
+
+.btn--block {
+  width: 100%;
+}
+
+/* Trailing arrow affordance for link-style CTAs. */
+.btn__arrow {
+  transition: transform var(--dur) var(--ease);
+}
+.btn:hover .btn__arrow {
+  transform: translateX(3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .btn__arrow { transition: none; }
+  .btn:active { transform: none; }
 }

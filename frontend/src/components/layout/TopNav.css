@@ -1,84 +1,152 @@
 .topnav {
   height: var(--topnav-height);
-  background: var(--color-navy-800);
-  color: #fff;
+  background: var(--color-chrome);
+  color: var(--color-chrome-text);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--sp-4);
+  padding: 0 var(--sp-5);
   flex-shrink: 0;
   z-index: 50;
-  box-shadow: var(--shadow-sm);
+  border-bottom: 1px solid var(--color-chrome-line);
+  transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease);
 }
 
 .topnav__left,
 .topnav__right {
   display: flex;
   align-items: center;
-  gap: var(--sp-3);
+  gap: var(--sp-4);
 }
 
-.topnav__menu {
-  display: none;
+.topnav__menu,
+.topnav__collapse {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
-  color: #fff;
-  font-size: 1.25rem;
+  color: var(--color-chrome-text);
+  font-size: 1.15rem;
   cursor: pointer;
-  padding: var(--sp-1) var(--sp-2);
+  padding: var(--sp-2);
+  border-radius: var(--radius-md);
+  line-height: 1;
+  transition: background var(--dur-fast) var(--ease);
 }
+.topnav__menu:hover,
+.topnav__collapse:hover { background: var(--color-chrome-hover); }
+
+/* The mobile hamburger only shows on small screens; the desktop collapse
+   button only shows on larger screens. */
+.topnav__menu { display: none; }
+.topnav__collapse { display: inline-flex; }
 
 .topnav__brand {
   display: flex;
   align-items: center;
-  gap: var(--sp-2);
+  gap: var(--sp-3);
 }
 
 .topnav__mark {
-  color: var(--color-accent);
-  font-size: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-md);
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+  font-size: 1rem;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 .topnav__name {
   font-weight: 700;
   font-size: var(--fs-lg);
-  letter-spacing: 0.02em;
+  letter-spacing: -0.01em;
+  color: #fff;
 }
 
 .topnav__hint {
   font-size: var(--fs-xs);
-  color: #9fb3c8;
+  color: var(--color-chrome-text-muted);
+  padding-left: var(--sp-4);
+  border-left: 1px solid var(--color-chrome-line);
+  letter-spacing: 0.02em;
 }
 
 .topnav__icon-btn {
   background: none;
   border: none;
-  color: #cdd8e3;
-  font-size: 1.1rem;
+  color: var(--color-chrome-text-muted);
+  font-size: 1.05rem;
   cursor: pointer;
-  padding: var(--sp-1) var(--sp-2);
+  padding: var(--sp-2);
+  border-radius: var(--radius-md);
+  line-height: 1;
+  transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+.topnav__icon-btn:hover {
+  color: var(--color-chrome-text);
+  background: var(--color-chrome-hover);
 }
 
-.topnav__icon-btn:hover {
+/* Theme switcher — a compact segmented control living in the top bar. */
+.topnav__themes {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--color-chrome-line);
+}
+.topnav__theme {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 24px;
+  border: none;
+  background: none;
+  color: var(--color-chrome-text-muted);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+  transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+.topnav__theme:hover { color: var(--color-chrome-text); }
+.topnav__theme--active {
+  background: var(--color-accent);
   color: #fff;
 }
 
 .topnav__avatar {
   width: 32px;
   height: 32px;
-  border-radius: 50%;
-  background: var(--color-accent);
+  border-radius: var(--radius-pill);
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-strong));
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: var(--fs-xs);
   font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
+  .topnav {
+    padding: 0 var(--sp-4);
+  }
   .topnav__menu {
-    display: block;
+    display: inline-flex;
+  }
+  .topnav__collapse {
+    display: none;
   }
   .topnav__hint {
     display: none;
